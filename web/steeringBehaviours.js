@@ -2,11 +2,11 @@ function SteeringBehaviours(player) {
     this.player = player;
 
     this.seekSteeringForce = function(target) {
-        steeringForce = target.clone();
-        steeringForce.subtract(this.player.position);
-        steeringForce.normalize();
-        steeringForce.multiply(this.player.maxSpeed);
-        steeringForce.subtract(this.player.velocity);
+        steeringForce = target.clone();               // take the current target
+        steeringForce.subtract(this.player.position); // calculate the vector from current position to the target
+        steeringForce.normalize();                    // make this vector normalized
+        steeringForce.multiply(this.player.maxSpeed); // make this vector the length of max speed
+        steeringForce.subtract(this.player.velocity); // subtract the current velocity
 
         return steeringForce;
     };
