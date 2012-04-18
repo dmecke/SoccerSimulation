@@ -1,7 +1,8 @@
 var Vector2d = require('./vector2d');
 var SteeringBehaviours = require('./steeringBehaviours');
 
-function Player() {
+function Player(id, world) {
+    this.id = id;
     this.position = new Vector2d(300, 200);
     this.width = 10;
     this.height = 10;
@@ -15,12 +16,15 @@ function Player() {
     this.color = 'rgba(255, 0, 0, 100)';
     this.currentTarget = new Vector2d(300, 200);
     this.steeringBehaviours = new SteeringBehaviours(this);
+    this.world = world;
+    this.neighbours = [];
 
     this.update = function() {
         if (this.position.distanceSq(this.currentTarget) < 100) {
             this.currentTarget.x = Math.random() * 600;
             this.currentTarget.y = Math.random() * 400;
         }
+        this.tagNeighbours();
 
         var steeringForce = this.calculateSteeringForce();
         steeringForce.divide(this.mass);
@@ -56,11 +60,36 @@ function Player() {
         return steeringForce;
     };
 
+    this.tagNeighbours = function() {
+        this.neighbours = [];
+        for (var i = 0; i < this.world.players.length; i++) {
+            if (!this.world.players[i].equals(this) && this.world.players[i].position.distanceSq(this.position) < 10000) {
+                this.neighbours.push(this.world.players[i]);
+                console.log('neighours: ' + this.id + ' & ' + this.world.players[i].id);
+            }
+        }
+    };
+
     this.updateHeadingPosition = function() {
         this.headingPosition = this.position.clone();
         var headingClone = this.heading.clone();
         headingClone.multiply(15);
         this.headingPosition.add(headingClone);
+    };
+
+    this.equals = function(player) {
+        return this.id == player.id;
+    };
+
+    this.toJSON = function() {
+        return {
+            'color': this.color,
+            'width': this.width,
+            'height': this.height,
+            'position': this.position,
+            'headingPosition' : this.headingPosition,
+            'currentTarget': this.currentTarget
+        }
     };
 }
 

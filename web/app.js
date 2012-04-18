@@ -7,16 +7,16 @@ var Player = require('./player');
 
 var world = new World();
 
-var playerRed = new Player();
+var playerRed = new Player(1, world);
 playerRed.color = 'rgba(255, 0, 0, 100)';
 world.players.push(playerRed);
 
-var playerBlue = new Player();
+var playerBlue = new Player(2, world);
 playerBlue.color = 'rgba(0, 0, 255, 100)';
 playerBlue.maxSpeed = 10;
 world.players.push(playerBlue);
 
-var playerGreen = new Player();
+var playerGreen = new Player(3, world);
 playerGreen.color = 'rgba(0, 200, 0, 100)';
 playerGreen.maxSpeed = 30;
 world.players.push(playerGreen);
