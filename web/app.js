@@ -18,6 +18,7 @@ world.players.push(playerBlue);
 
 var playerGreen = new Player();
 playerGreen.color = 'rgba(0, 200, 0, 100)';
+playerGreen.maxSpeed = 30;
 world.players.push(playerGreen);
 
 io.sockets.on('connection', function(socket) {
