@@ -17,6 +17,11 @@ function Player() {
     this.steeringBehaviours = new SteeringBehaviours(this);
 
     this.update = function() {
+        if (this.position.distanceSq(this.currentTarget) < 100) {
+            this.currentTarget.x = Math.random() * 600;
+            this.currentTarget.y = Math.random() * 400;
+        }
+
         var steeringForce = this.calculateSteeringForce();
         steeringForce.divide(this.mass);
         this.velocity.add(steeringForce);
