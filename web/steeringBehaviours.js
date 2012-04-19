@@ -2,6 +2,11 @@ var Vector2d = require('./vector2d');
 
 function SteeringBehaviours(player) {
     this.player = player;
+    this.seek = false;
+    this.arrive = false;
+    this.separation = false;
+    this.interpose = false;
+    this.pursuit = false;
 
     this.seekSteeringForce = function(target) {
         steeringForce = target.clone();               // take the current target
@@ -110,6 +115,33 @@ function SteeringBehaviours(player) {
         seekTarget.add(evaderVelocity);
 
         return this.seekSteeringForce(seekTarget);
+    };
+
+    this.update = function() {
+        var steeringForce = new Vector2d(0, 0);
+        if (this.seek) {
+            steeringForce.add(this.seekSteeringForce(this.player.currentTarget));
+        }
+        if (this.arrive) {
+            steeringForce.add(this.arriveSteeringForce(this.player.currentTarget, 2));
+        }
+        if (this.separation) {
+            steeringForce.add(this.separationSteeringForce());
+        }
+        if (this.interpose) {
+            steeringForce.add(this.interposeSteeringForce(this.player.world.players[0], this.player.world.players[1]));
+        }
+        if (this.pursuit) {
+            steeringForce.add(this.pursuitSteeringForce(this.player.world.players[0]));
+        }
+
+        steeringForce.truncate(this.player.maxForce);
+        steeringForce.divide(this.player.mass);
+
+        this.player.updateVelocity(steeringForce);
+        this.player.updatePosition();
+        this.player.updateHeading();
+        this.player.updateHeadingPosition();
     };
 
     this.toJSON = function() {

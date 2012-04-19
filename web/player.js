@@ -1,5 +1,6 @@
 var Vector2d = require('./vector2d');
 var SteeringBehaviours = require('./steeringBehaviours');
+var PlayerStateMachine = require('./playerStateMachine');
 
 function Player(id, world) {
     this.id = id;
@@ -18,6 +19,7 @@ function Player(id, world) {
     this.steeringBehaviours = new SteeringBehaviours(this);
     this.world = world;
     this.neighbours = [];
+    this.stateMachine = new PlayerStateMachine(this);
 
     this.update = function() {
         if (this.position.distanceSq(this.currentTarget) < 100) {
@@ -26,14 +28,26 @@ function Player(id, world) {
         }
         this.tagNeighbours();
 
-        var steeringForce = this.calculateSteeringForce();
-        steeringForce.divide(this.mass);
+        this.stateMachine.update();
+        this.steeringBehaviours.update();
+    };
+
+    this.tagNeighbours = function() {
+        this.neighbours = [];
+        for (var i = 0; i < this.world.players.length; i++) {
+            if (!this.world.players[i].equals(this) && this.world.players[i].position.distanceSq(this.position) < 10000) {
+                this.neighbours.push(this.world.players[i]);
+            }
+        }
+    };
+
+    this.updateVelocity = function(steeringForce) {
         this.velocity.add(steeringForce);
         this.velocity.truncate(this.maxSpeed);
-        this.position.add(this.velocity);
-        this.heading = this.velocity.clone();
-        this.heading.normalize();
+    };
 
+    this.updatePosition = function() {
+        this.position.add(this.velocity);
         if (this.position.x > 595) {
             this.position.x = 595;
         }
@@ -46,33 +60,11 @@ function Player(id, world) {
         if (this.position.y < 5) {
             this.position.y = 5;
         }
-
-        this.updateHeadingPosition();
     };
 
-    this.calculateSteeringForce = function() {
-        var steeringForce = new Vector2d(0, 0);
-        if (this.id != 3) {
-//            steeringForce.add(this.steeringBehaviours.seekSteeringForce(this.currentTarget));
-            steeringForce.add(this.steeringBehaviours.arriveSteeringForce(this.currentTarget, 2));
-            steeringForce.add(this.steeringBehaviours.separationSteeringForce());
-        } else {
-//            steeringForce.add(this.steeringBehaviours.interposeSteeringForce(this.world.players[0], this.world.players[1]));
-            steeringForce.add(this.steeringBehaviours.pursuitSteeringForce(this.world.players[0]));
-        }
-
-        steeringForce.truncate(this.maxForce);
-
-        return steeringForce;
-    };
-
-    this.tagNeighbours = function() {
-        this.neighbours = [];
-        for (var i = 0; i < this.world.players.length; i++) {
-            if (!this.world.players[i].equals(this) && this.world.players[i].position.distanceSq(this.position) < 10000) {
-                this.neighbours.push(this.world.players[i]);
-            }
-        }
+    this.updateHeading = function() {
+        this.heading = this.velocity.clone();
+        this.heading.normalize();
     };
 
     this.updateHeadingPosition = function() {
