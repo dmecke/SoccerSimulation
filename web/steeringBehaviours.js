@@ -1,3 +1,5 @@
+var Vector2d = require('./vector2d');
+
 function SteeringBehaviours(player) {
     this.player = player;
 
@@ -30,6 +32,25 @@ function SteeringBehaviours(player) {
         }
 
         return new Vector2d(0, 0);
+    };
+
+    this.separationSteeringForce = function() {
+        var steeringForce = new Vector2d(0, 0);
+        for (var i = 0; i < this.player.neighbours.length; i++) {
+            var toNeighbour = this.player.position.clone();
+            var neighbourPosition = this.player.neighbours[i].position.clone();
+
+            toNeighbour.subtract(neighbourPosition);
+            var length = toNeighbour.length();
+            if (length != 0) {
+                toNeighbour.normalize();
+                var separationTweaker = 100;
+                toNeighbour.divide(length / separationTweaker);
+                steeringForce.add(toNeighbour);
+            }
+
+        }
+        return steeringForce;
     };
 
     this.toJSON = function() {

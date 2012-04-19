@@ -54,6 +54,7 @@ function Player(id, world) {
         var steeringForce = new Vector2d(0, 0);
 //        steeringForce.add(this.steeringBehaviours.seekSteeringForce(this.currentTarget));
         steeringForce.add(this.steeringBehaviours.arriveSteeringForce(this.currentTarget));
+        steeringForce.add(this.steeringBehaviours.separationSteeringForce(this.currentTarget));
 
         steeringForce.truncate(this.maxForce);
 
@@ -65,7 +66,6 @@ function Player(id, world) {
         for (var i = 0; i < this.world.players.length; i++) {
             if (!this.world.players[i].equals(this) && this.world.players[i].position.distanceSq(this.position) < 10000) {
                 this.neighbours.push(this.world.players[i]);
-                console.log('neighours: ' + this.id + ' & ' + this.world.players[i].id);
             }
         }
     };
