@@ -119,7 +119,7 @@ function SteeringBehaviours(player) {
     };
 
     this.update = function() {
-        if (this.player.position.distanceSq(this.currentTarget) < 100) {
+        if (this.isAtCurrentTarget()) {
             this.currentTarget.x = Math.random() * 600;
             this.currentTarget.y = Math.random() * 400;
         }
@@ -148,6 +148,10 @@ function SteeringBehaviours(player) {
         this.player.updatePosition();
         this.player.updateHeading();
         this.player.updateHeadingPosition();
+    };
+
+    this.isAtCurrentTarget = function() {
+        return this.player.position.distanceSq(this.currentTarget) < 100;
     };
 
     this.toJSON = function() {

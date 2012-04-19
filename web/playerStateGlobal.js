@@ -1,4 +1,6 @@
 function PlayerStateGlobal() {
+    this.name = 'Global';
+
     this.enter = function(player) {
     };
 

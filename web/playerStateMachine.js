@@ -16,6 +16,7 @@ function PlayerStateMachine(player) {
     };
 
     this.changeState = function(newState) {
+        console.log(this.player.id + ' changed state to ' + newState.name);
         this.currentState.exit(this.player);
         this.currentState = newState;
         this.currentState.enter(this.player);
