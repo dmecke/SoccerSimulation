@@ -52,9 +52,13 @@ function Player(id, world) {
 
     this.calculateSteeringForce = function() {
         var steeringForce = new Vector2d(0, 0);
-//        steeringForce.add(this.steeringBehaviours.seekSteeringForce(this.currentTarget));
-        steeringForce.add(this.steeringBehaviours.arriveSteeringForce(this.currentTarget, 2));
-        steeringForce.add(this.steeringBehaviours.separationSteeringForce());
+        if (this.id != 3) {
+//            steeringForce.add(this.steeringBehaviours.seekSteeringForce(this.currentTarget));
+            steeringForce.add(this.steeringBehaviours.arriveSteeringForce(this.currentTarget, 2));
+            steeringForce.add(this.steeringBehaviours.separationSteeringForce());
+        } else {
+            steeringForce.add(this.steeringBehaviours.interposeSteeringForce(this.world.players[0], this.world.players[1]));
+        }
 
         steeringForce.truncate(this.maxForce);
 
