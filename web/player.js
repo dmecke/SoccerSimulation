@@ -53,7 +53,7 @@ function Player(id, world) {
     this.calculateSteeringForce = function() {
         var steeringForce = new Vector2d(0, 0);
 //        steeringForce.add(this.steeringBehaviours.seekSteeringForce(this.currentTarget));
-        steeringForce.add(this.steeringBehaviours.arriveSteeringForce(this.currentTarget));
+        steeringForce.add(this.steeringBehaviours.arriveSteeringForce(this.currentTarget, 2));
         steeringForce.add(this.steeringBehaviours.separationSteeringForce(this.currentTarget));
 
         steeringForce.truncate(this.maxForce);

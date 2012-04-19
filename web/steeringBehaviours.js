@@ -13,13 +13,17 @@ function SteeringBehaviours(player) {
         return steeringForce;
     };
 
-    this.arriveSteeringForce = function(target) {
+    /**
+     * @param target
+     * @param decelerationFactor (3: slow / 2: normal / 1: fast)
+     */
+    this.arriveSteeringForce = function(target, decelerationFactor) {
         var toTarget = target.clone();
         toTarget.subtract(this.player.position); // calculate the vector from current position to the target
         var distance = toTarget.length();        // calculate the distance between current and target position
 
         if (distance > 0) {
-            var decelerationTweaker = 3;
+            var decelerationTweaker = 1.5 * decelerationFactor;
             var speed = distance / decelerationTweaker; // calculate the speed needed to reach the target
             speed = Math.min(speed, this.player.maxSpeed);               // avoid being faster than the maximum
 
