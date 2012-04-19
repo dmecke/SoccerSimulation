@@ -53,6 +53,10 @@ function Vector2d(x, y) {
         }
     };
 
+    this.dot = function(vector2d) {
+        return this.x * vector2d.x + this.y * vector2d.y;
+    };
+
     this.truncate = function(max) {
         if (this.length() > max) {
             this.normalize();
