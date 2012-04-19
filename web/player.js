@@ -57,7 +57,8 @@ function Player(id, world) {
             steeringForce.add(this.steeringBehaviours.arriveSteeringForce(this.currentTarget, 2));
             steeringForce.add(this.steeringBehaviours.separationSteeringForce());
         } else {
-            steeringForce.add(this.steeringBehaviours.interposeSteeringForce(this.world.players[0], this.world.players[1]));
+//            steeringForce.add(this.steeringBehaviours.interposeSteeringForce(this.world.players[0], this.world.players[1]));
+            steeringForce.add(this.steeringBehaviours.pursuitSteeringForce(this.world.players[0]));
         }
 
         steeringForce.truncate(this.maxForce);

@@ -89,6 +89,29 @@ function SteeringBehaviours(player) {
         return this.arriveSteeringForce(midpoint, 1)
     };
 
+    this.pursuitSteeringForce = function(evader) {
+
+        // calculate the vector to the evader
+        var toEvader = evader.position.clone();
+        toEvader.subtract(this.player.position);
+
+        // calculate whether the evader is right in front of use and heading (acos 0.95 = 18 degs)
+        var relativeHeading = this.player.heading.dot(evader.heading);
+        if (toEvader.dot(this.player.heading) > 0 && relativeHeading < -0.95) {
+            return this.seekSteeringForce(evader.position);
+        }
+
+        var evaderLength = evader.position.length();
+        var lookAheadTime = evaderLength / (this.player.maxSpeed + evader.velocity.length());
+
+        var seekTarget = evader.position.clone();
+        var evaderVelocity = evader.velocity.clone();
+        evaderVelocity.multiply(lookAheadTime);
+        seekTarget.add(evaderVelocity);
+
+        return this.seekSteeringForce(seekTarget);
+    };
+
     this.toJSON = function() {
         return {};
     }
