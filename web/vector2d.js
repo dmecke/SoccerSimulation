@@ -47,8 +47,10 @@ function Vector2d(x, y) {
 
     this.normalize = function() {
         var length = this.length();
-        this.x = this.x / length;
-        this.y = this.y / length;
+        if (length != 0) {
+            this.x = this.x / length;
+            this.y = this.y / length;
+        }
     };
 
     this.truncate = function(max) {
