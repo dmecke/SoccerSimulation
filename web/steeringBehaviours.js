@@ -2,6 +2,7 @@ var Vector2d = require('./vector2d');
 
 function SteeringBehaviours(player) {
     this.player = player;
+    this.currentTarget = new Vector2d(300, 200);
     this.seek = false;
     this.arrive = false;
     this.separation = false;
@@ -118,12 +119,17 @@ function SteeringBehaviours(player) {
     };
 
     this.update = function() {
+        if (this.player.position.distanceSq(this.currentTarget) < 100) {
+            this.currentTarget.x = Math.random() * 600;
+            this.currentTarget.y = Math.random() * 400;
+        }
+
         var steeringForce = new Vector2d(0, 0);
         if (this.seek) {
-            steeringForce.add(this.seekSteeringForce(this.player.currentTarget));
+            steeringForce.add(this.seekSteeringForce(this.currentTarget));
         }
         if (this.arrive) {
-            steeringForce.add(this.arriveSteeringForce(this.player.currentTarget, 2));
+            steeringForce.add(this.arriveSteeringForce(this.currentTarget, 2));
         }
         if (this.separation) {
             steeringForce.add(this.separationSteeringForce());

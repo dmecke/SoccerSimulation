@@ -15,17 +15,12 @@ function Player(id, world) {
     this.headingPosition = this.position.clone();
     this.headingPosition.add(this.heading);
     this.color = 'rgba(255, 0, 0, 100)';
-    this.currentTarget = new Vector2d(300, 200);
     this.steeringBehaviours = new SteeringBehaviours(this);
     this.world = world;
     this.neighbours = [];
     this.stateMachine = new PlayerStateMachine(this);
 
     this.update = function() {
-        if (this.position.distanceSq(this.currentTarget) < 100) {
-            this.currentTarget.x = Math.random() * 600;
-            this.currentTarget.y = Math.random() * 400;
-        }
         this.tagNeighbours();
 
         this.stateMachine.update();
@@ -85,7 +80,7 @@ function Player(id, world) {
             'height': this.height,
             'position': this.position,
             'headingPosition' : this.headingPosition,
-            'currentTarget': this.currentTarget
+            'currentTarget': this.steeringBehaviours.currentTarget
         }
     };
 }
