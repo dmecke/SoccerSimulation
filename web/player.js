@@ -6,7 +6,7 @@ function Player(id, team) {
     MovingEntity.call(this);
 
     this.id = id;
-    this.color = 'rgba(255, 0, 0, 100)';
+    this.color = team.color;
     this.team = team;
     this.neighbours = [];
     this.stateMachine = new PlayerStateMachine(this);

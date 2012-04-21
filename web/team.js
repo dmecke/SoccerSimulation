@@ -8,8 +8,10 @@ function Team(id, pitch, color) {
     this.players = [];
 
     var player1 = new Player(1, this);
-    player1.color = this.color;
     this.players.push(player1);
+
+    var player2 = new Player(2, this);
+    this.players.push(player2);
 
     this.update = function() {
         jquery.each(this.players, function(index, player) {
