@@ -2,24 +2,24 @@ var PlayerStateGlobal = require('./playerStateGlobal');
 var PlayerStateWait = require('./playerStateWait');
 
 function PlayerStateMachine(player) {
-    this.player = player;
+    this.entity = player;
     this.currentState = new PlayerStateWait();
     this.globalState = new PlayerStateGlobal();
 
     this.update = function() {
         if (this.globalState) {
-            this.globalState.execute(this.player);
+            this.globalState.execute(this.entity);
         }
         if (this.currentState) {
-            this.currentState.execute(this.player);
+            this.currentState.execute(this.entity);
         }
     };
 
     this.changeState = function(newState) {
-        console.log(this.player.id + ' changed state to ' + newState.name);
-        this.currentState.exit(this.player);
+        console.log(this.entity.id + ' changed state to ' + newState.name);
+        this.currentState.exit(this.entity);
         this.currentState = newState;
-        this.currentState.enter(this.player);
+        this.currentState.enter(this.entity);
     };
 
     this.toJSON = function() {
