@@ -29,7 +29,7 @@ function PlayerStateWait() {
 //                player.team.requestPass(player); todo
 //            }
 
-//            if (player.pitch.gameOn) { todo
+            if (player.pitch.gameOn) {
 //                if (player.isClosestTeamMemberToBall() && todo
 //                    player.team.receiver == null && todo
 //                    !player.pitch.goalkeeperHasBall()) { todo
@@ -37,7 +37,7 @@ function PlayerStateWait() {
 //
 //                    return;
 //                }
-//            }
+            }
         }
     };
 }
