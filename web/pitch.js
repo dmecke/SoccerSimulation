@@ -1,6 +1,6 @@
 var jquery = require('jquery');
 
-function World() {
+function Pitch() {
     this.players = [];
 
     this.update = function() {
@@ -10,4 +10,4 @@ function World() {
     }
 }
 
-module.exports = World;
+module.exports = Pitch;

@@ -2,7 +2,7 @@ var Vector2d = require('./vector2d');
 var SteeringBehaviours = require('./steeringBehaviours');
 var PlayerStateMachine = require('./playerStateMachine');
 
-function Player(id, world) {
+function Player(id, pitch) {
     this.id = id;
     this.position = new Vector2d(300, 200);
     this.width = 10;
@@ -16,7 +16,7 @@ function Player(id, world) {
     this.headingPosition.add(this.heading);
     this.color = 'rgba(255, 0, 0, 100)';
     this.steeringBehaviours = new SteeringBehaviours(this);
-    this.world = world;
+    this.pitch = pitch;
     this.neighbours = [];
     this.stateMachine = new PlayerStateMachine(this);
 
@@ -29,9 +29,9 @@ function Player(id, world) {
 
     this.tagNeighbours = function() {
         this.neighbours = [];
-        for (var i = 0; i < this.world.players.length; i++) {
-            if (!this.world.players[i].equals(this) && this.world.players[i].position.distanceSq(this.position) < 10000) {
-                this.neighbours.push(this.world.players[i]);
+        for (var i = 0; i < this.pitch.players.length; i++) {
+            if (!this.pitch.players[i].equals(this) && this.pitch.players[i].position.distanceSq(this.position) < 10000) {
+                this.neighbours.push(this.pitch.players[i]);
             }
         }
     };

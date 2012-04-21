@@ -6,13 +6,13 @@
         <script type="text/javascript" src="/socket.io/socket.io.js"></script>
         <script type="text/javascript">
 var io = io.connect('http://nodejs.playground.cunningsoft.de:8000');
-io.on('render', function(world) {
-    console.log(world);
+io.on('render', function(pitch) {
+    console.log(pitch);
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
 
     canvas.width = canvas.width;
-    $.each(world.players, function(index, player) {
+    $.each(pitch.players, function(index, player) {
         context.fillStyle = player.color;
         context.fillRect(player.position.x - 5, player.position.y - 5, player.width, player.height);
 
