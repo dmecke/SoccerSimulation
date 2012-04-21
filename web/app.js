@@ -3,23 +3,15 @@ httpServer.listen(8000);
 var io = require('socket.io').listen(httpServer, { log: false });
 
 var Pitch = require('./pitch');
-var Player = require('./player');
+var Team = require('./team');
 
 var pitch = new Pitch();
 
-var playerRed = new Player(1, pitch);
-playerRed.color = 'rgba(255, 0, 0, 100)';
-pitch.players.push(playerRed);
+var teamRead = new Team(1, pitch, 'rgba(255, 0, 0, 100)');
+pitch.teams.push(teamRead);
 
-var playerBlue = new Player(2, pitch);
-playerBlue.color = 'rgba(0, 0, 255, 100)';
-playerBlue.maxSpeed = 10;
-pitch.players.push(playerBlue);
-
-var playerGreen = new Player(3, pitch);
-playerGreen.color = 'rgba(0, 200, 0, 100)';
-playerGreen.maxSpeed = 30;
-pitch.players.push(playerGreen);
+var teamBlue = new Team(2, pitch, 'rgba(0, 0, 255, 100)');
+pitch.teams.push(teamBlue);
 
 io.sockets.on('connection', function(socket) {
     console.log('socket ' + socket.id + ' connected');

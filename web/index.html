@@ -12,17 +12,19 @@ io.on('render', function(pitch) {
     var context = canvas.getContext('2d');
 
     canvas.width = canvas.width;
-    $.each(pitch.players, function(index, player) {
-        context.fillStyle = player.color;
-        context.fillRect(player.position.x - 5, player.position.y - 5, player.width, player.height);
+    $.each(pitch.teams, function(teamIndex, team) {
+        $.each(team.players, function(playerIndex, player) {
+            context.fillStyle = player.color;
+            context.fillRect(player.position.x - 5, player.position.y - 5, player.width, player.height);
 
-//        context.beginPath();
-//        context.arc(player.position.x, player.position.y, 50, 0, 2 * Math.PI);
-//        context.stroke();
+//            context.beginPath();
+//            context.arc(player.position.x, player.position.y, 50, 0, 2 * Math.PI);
+//            context.stroke();
 
-        context.fillRect(player.headingPosition.x, player.headingPosition.y, 1, 1);
+            context.fillRect(player.headingPosition.x, player.headingPosition.y, 1, 1);
 
-        context.fillRect(player.currentTarget.x - 2, player.currentTarget.y - 2, 4, 4);
+            context.fillRect(player.currentTarget.x - 2, player.currentTarget.y - 2, 4, 4);
+        });
     });
 });
         </script>

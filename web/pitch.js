@@ -1,12 +1,12 @@
 var jquery = require('jquery');
 
 function Pitch() {
-    this.players = [];
+    this.teams = [];
     this.gameOn = true;
 
     this.update = function() {
-        jquery.each(this.players, function(index, player) {
-            player.update();
+        jquery.each(this.teams, function(index, team) {
+            team.update();
         });
     }
 }

@@ -2,7 +2,7 @@ var Vector2d = require('./vector2d');
 var SteeringBehaviours = require('./steeringBehaviours');
 var PlayerStateMachine = require('./playerStateMachine');
 
-function Player(id, pitch) {
+function Player(id, team) {
     this.id = id;
     this.position = new Vector2d(300, 200);
     this.width = 10;
@@ -16,7 +16,7 @@ function Player(id, pitch) {
     this.headingPosition.add(this.heading);
     this.color = 'rgba(255, 0, 0, 100)';
     this.steeringBehaviours = new SteeringBehaviours(this);
-    this.pitch = pitch;
+    this.team = team;
     this.neighbours = [];
     this.stateMachine = new PlayerStateMachine(this);
 
@@ -29,9 +29,11 @@ function Player(id, pitch) {
 
     this.tagNeighbours = function() {
         this.neighbours = [];
-        for (var i = 0; i < this.pitch.players.length; i++) {
-            if (!this.pitch.players[i].equals(this) && this.pitch.players[i].position.distanceSq(this.position) < 10000) {
-                this.neighbours.push(this.pitch.players[i]);
+        for (var i = 0; i < this.team.pitch.teams.length; i++) {
+            for (var j = 0; j < this.team.pitch.teams[i].players.length; j++) {
+                if (!this.team.pitch.teams[i].players[j].equals(this) && this.team.pitch.teams[i].players[j].position.distanceSq(this.position) < 10000) {
+                    this.neighbours.push(this.team.pitch.teams[i].players[j]);
+                }
             }
         }
     };
@@ -70,7 +72,7 @@ function Player(id, pitch) {
     };
 
     this.equals = function(player) {
-        return this.id == player.id;
+        return this.id == player.id && this.team.equals(player.team);
     };
 
     this.toJSON = function() {
