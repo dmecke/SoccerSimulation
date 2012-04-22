@@ -19,11 +19,11 @@ function PlayerStateChase() {
 //        }
 
         // player is closest to ball - so update position and keep chasing
-//        if (player.isClosestTeamMemberToBall()) { todo
-//            player.steeringBehaviours.setTarget(player.ball.position()); todo
-//
-//            return;
-//        }
+        if (player.isClosestTeamMemberToBall()) {
+            player.steeringBehaviours.currentTarget = player.team.pitch.ball.position;
+
+            return;
+        }
 
         // player is not the closest to ball - move back to home region
 //        player.stateMachine.changeState(new PlayerStateReturnToHomeRegion(player)); todo
