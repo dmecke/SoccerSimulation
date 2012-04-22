@@ -119,10 +119,10 @@ function SteeringBehaviours(entity) {
     };
 
     this.update = function() {
-        if (this.isAtCurrentTarget()) {
-            this.currentTarget.x = Math.random() * 1200;
-            this.currentTarget.y = Math.random() * 600;
-        }
+//        if (this.isAtCurrentTarget()) {
+//            this.currentTarget.x = Math.random() * 1200;
+//            this.currentTarget.y = Math.random() * 600;
+//        }
 
         var steeringForce = new Vector2d(0, 0);
         if (this.seek) {

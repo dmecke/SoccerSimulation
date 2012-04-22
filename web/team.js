@@ -18,6 +18,18 @@ function Team(id, pitch, color) {
     player2.stateMachine.changeState(new PlayerStateWait());
     this.players.push(player2);
 
+    var player3 = new Player(3, this);
+    player3.stateMachine.changeState(new PlayerStateWait());
+    this.players.push(player3);
+
+    var player4 = new Player(4, this);
+    player4.stateMachine.changeState(new PlayerStateWait());
+    this.players.push(player4);
+
+    var player5 = new Player(5, this);
+    player5.stateMachine.changeState(new PlayerStateWait());
+    this.players.push(player5);
+
     this.playerClosestToBall = player1;
     this.receivingPlayer = null;
     this.controllingPlayer = null;
@@ -48,7 +60,7 @@ function Team(id, pitch, color) {
 
     this.allPlayersAtHome = function() {
         for (var i = 0; i < this.players.length; i++) {
-            if (!player.inHomeRegion()) {
+            if (!this.players[i].inHomeRegion()) {
                 return false;
             }
         }

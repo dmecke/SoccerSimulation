@@ -6,13 +6,17 @@ function Pitch() {
     this.teams = [];
     this.ball = null;
     this.regions = [];
-    this.gameOn = true;
+    this.gameOn = false;
 
     this.update = function() {
         this.ball.update();
         jquery.each(this.teams, function(index, team) {
             team.update();
         });
+
+        if (!this.gameOn && this.teams[0].allPlayersAtHome() && this.teams[1].allPlayersAtHome()) {
+            this.gameOn = true;
+        }
     };
 
     this.setUpRegions = function() {

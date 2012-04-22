@@ -2,7 +2,7 @@ var Vector2d = require('./vector2d');
 var SteeringBehaviours = require('./steeringBehaviours');
 
 function MovingEntity() {
-    this.position = new Vector2d(600, 300);
+    this.position = new Vector2d(450, 600);
     this.maxForce = 5;
     this.maxSpeed = 20;
     this.mass = 1;
