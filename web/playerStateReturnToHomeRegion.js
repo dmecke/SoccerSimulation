@@ -1,5 +1,3 @@
-var PlayerStateWait = require('./playerStateWait');
-
 function PlayerStateReturnToHomeRegion() {
     this.name = 'ReturnToHomeRegion';
 
@@ -12,7 +10,7 @@ function PlayerStateReturnToHomeRegion() {
     };
 
     this.execute = function(player) {
-        player.homeRegion.center.log();
+        var PlayerStateWait = require('./playerStateWait');
         player.steeringBehaviours.currentTarget = player.homeRegion.center;
 
         if (player.inHomeRegion()) {

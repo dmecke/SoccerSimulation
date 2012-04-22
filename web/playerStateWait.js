@@ -1,5 +1,4 @@
 var Vector2d = require('./vector2d');
-var PlayerStateChase = require('./playerStateChase');
 
 function PlayerStateWait() {
     this.name = 'Wait';
@@ -11,6 +10,7 @@ function PlayerStateWait() {
     };
 
     this.execute = function(player) {
+        var PlayerStateChase = require('./playerStateChase');
 
         if (!player.steeringBehaviours.isAtCurrentTarget()) {
             // player has been moved away from target - move to it again
@@ -34,9 +34,7 @@ function PlayerStateWait() {
                 if (player.isClosestTeamMemberToBall() &&
                     player.team.receiver == null) {
 //                    !player.team.pitch.goalkeeperHasBall()) { todo
-                    player.stateMachine.changeState(new PlayerStateChase(player));
-//
-//                    return;
+                    player.stateMachine.changeState(new PlayerStateChase());
                 }
             }
         }

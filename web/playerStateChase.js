@@ -1,4 +1,3 @@
-var Vector2d = require('./vector2d');
 
 function PlayerStateChase() {
     this.name = 'Chase';
@@ -12,6 +11,7 @@ function PlayerStateChase() {
     };
 
     this.execute = function(player) {
+        var PlayerStateReturnToHomeRegion = require('./playerStateReturnToHomeRegion');
         // ball can be shooted - so do it
 //        if (player.ballWithinKickingRange()) { todo
 //            player.stateMachine.changeState(new PlayerStateKickBall(player)); todo
@@ -26,7 +26,7 @@ function PlayerStateChase() {
         }
 
         // player is not the closest to ball - move back to home region
-//        player.stateMachine.changeState(new PlayerStateReturnToHomeRegion(player)); todo
+        player.stateMachine.changeState(new PlayerStateReturnToHomeRegion());
     };
 }
 
