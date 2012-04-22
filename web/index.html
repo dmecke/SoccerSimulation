@@ -8,6 +8,10 @@
 var io = io.connect('http://nodejs.playground.cunningsoft.de:8000');
 io.on('render', function(pitch) {
     console.log(pitch);
+
+    $('#teamStateRed').html(pitch.teams[0].state);
+    $('#teamStateBlue').html(pitch.teams[1].state);
+
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
 
@@ -38,6 +42,16 @@ io.on('render', function(pitch) {
         </script>
     </head>
     <body>
-        <canvas id="canvas" width="1200" height="800" style="background: #d3d3d3"></canvas>
+        <canvas id="canvas" width="1200" height="800" style="background: #d3d3d3; float: left"></canvas>
+    <table>
+        <tr>
+            <td><b>Team State Red</b></td>
+            <td id="teamStateRed"></td>
+        </tr>
+        <tr>
+            <td><b>Team State Blue</b></td>
+            <td id="teamStateBlue"></td>
+        </tr>
+    </table>
     </body>
 </html>

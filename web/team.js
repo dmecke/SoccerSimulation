@@ -1,10 +1,12 @@
 var jquery = require('jquery');
 var Player = require('./player');
+var TeamStateMachine = require('./teamStateMachine');
 
 function Team(id, pitch, color) {
     this.id = id;
     this.color = color;
     this.pitch = pitch;
+    this.stateMachine = new TeamStateMachine(this);
     this.players = [];
 
     var player1 = new Player(1, this);
@@ -15,6 +17,7 @@ function Team(id, pitch, color) {
 
     this.playerClosestToBall = player1;
     this.receivingPlayer = null;
+    this.controllingPlayer = null;
 
     this.update = function() {
         for (var i = 0; i < this.players.length; i++) {
@@ -35,13 +38,18 @@ function Team(id, pitch, color) {
         }
     };
 
+    this.inControl = function() {
+        return this.controllingPlayer != null;
+    };
+
     this.equals = function(team) {
         return this.id == team.id;
     };
 
     this.toJSON = function() {
         return {
-            'players' : this.players
+            'players' : this.players,
+            'state': this.stateMachine.currentState.name
         }
     };
 }
