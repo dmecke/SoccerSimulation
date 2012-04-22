@@ -10,6 +10,7 @@ function Player(id, team) {
     this.team = team;
     this.neighbours = [];
     this.stateMachine = new PlayerStateMachine(this);
+    this.homeRegion = null;
 
     this.update = function() {
         this.tagNeighbours();
@@ -31,6 +32,14 @@ function Player(id, team) {
 
     this.isClosestTeamMemberToBall = function() {
         return this.team.playerClosestToBall.equals(this);
+    };
+
+    this.isControllingPlayer = function() {
+        return this.team.controllingPlayer.equals(this);
+    };
+
+    this.inHomeRegion = function() {
+        return this.homeRegion.center.distanceSq(this.position) < 100;
     };
 
     this.equals = function(player) {

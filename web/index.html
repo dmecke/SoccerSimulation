@@ -11,6 +11,10 @@ io.on('render', function(pitch) {
 
     $('#teamStateRed').html(pitch.teams[0].state);
     $('#teamStateBlue').html(pitch.teams[1].state);
+    $('#playerStateRed1').html(pitch.teams[0].players[0].state);
+    $('#playerStateRed2').html(pitch.teams[0].players[1].state);
+    $('#playerStateBlue1').html(pitch.teams[1].players[0].state);
+    $('#playerStateBlue2').html(pitch.teams[1].players[1].state);
 
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
@@ -42,7 +46,7 @@ io.on('render', function(pitch) {
         </script>
     </head>
     <body>
-        <canvas id="canvas" width="1200" height="800" style="background: #d3d3d3; float: left"></canvas>
+        <canvas id="canvas" width="1200" height="600" style="background: #d3d3d3; float: left"></canvas>
     <table>
         <tr>
             <td><b>Team State Red</b></td>
@@ -51,6 +55,22 @@ io.on('render', function(pitch) {
         <tr>
             <td><b>Team State Blue</b></td>
             <td id="teamStateBlue"></td>
+        </tr>
+        <tr>
+            <td><b>Player State Red 1</b></td>
+            <td id="playerStateRed1"></td>
+        </tr>
+        <tr>
+            <td><b>Player State Red 2</b></td>
+            <td id="playerStateRed2"></td>
+        </tr>
+        <tr>
+            <td><b>Player State Blue 1</b></td>
+            <td id="playerStateBlue1"></td>
+        </tr>
+        <tr>
+            <td><b>Player State Blue 2</b></td>
+            <td id="playerStateBlue2"></td>
         </tr>
     </table>
     </body>

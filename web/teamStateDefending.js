@@ -8,7 +8,7 @@ function TeamStateDefending() {
         } else {
             homeRegions = [1, 6, 8, 3, 5];
         }
-        changePlayerHomeRegions(team, homeRegions);
+        team.changePlayerHomeRegions(homeRegions);
 
         // if a player is in state "Wait" or "ReturnToHomeRegion, its
         // steering target must be updated to its new home region

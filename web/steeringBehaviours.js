@@ -2,7 +2,7 @@ var Vector2d = require('./vector2d');
 
 function SteeringBehaviours(entity) {
     this.entity = entity;
-    this.currentTarget = new Vector2d(600, 400);
+    this.currentTarget = new Vector2d(600, 300);
     this.seek = false;
     this.arrive = false;
     this.separation = false;
@@ -121,7 +121,7 @@ function SteeringBehaviours(entity) {
     this.update = function() {
         if (this.isAtCurrentTarget()) {
             this.currentTarget.x = Math.random() * 1200;
-            this.currentTarget.y = Math.random() * 800;
+            this.currentTarget.y = Math.random() * 600;
         }
 
         var steeringForce = new Vector2d(0, 0);

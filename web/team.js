@@ -1,6 +1,7 @@
-var jquery = require('jquery');
 var Player = require('./player');
 var TeamStateMachine = require('./teamStateMachine');
+var PlayerStateWait = require('./playerStateWait');
+var PlayerStateReturnToHomeRegion = require('./playerStateReturnToHomeRegion');
 
 function Team(id, pitch, color) {
     this.id = id;
@@ -10,14 +11,17 @@ function Team(id, pitch, color) {
     this.players = [];
 
     var player1 = new Player(1, this);
+    player1.stateMachine.changeState(new PlayerStateWait());
     this.players.push(player1);
 
     var player2 = new Player(2, this);
+    player2.stateMachine.changeState(new PlayerStateWait());
     this.players.push(player2);
 
     this.playerClosestToBall = player1;
     this.receivingPlayer = null;
     this.controllingPlayer = null;
+    this.supportingPlayer = null;
 
     this.update = function() {
         for (var i = 0; i < this.players.length; i++) {
@@ -40,6 +44,27 @@ function Team(id, pitch, color) {
 
     this.inControl = function() {
         return this.controllingPlayer != null;
+    };
+
+    this.allPlayersAtHome = function() {
+        for (var i = 0; i < this.players.length; i++) {
+            if (!player.inHomeRegion()) {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    this.returnAllFieldPlayersToHome = function() {
+        for (var i = 0; i < this.players.length; i++) {
+            this.players[i].stateMachine.changeState(new PlayerStateReturnToHomeRegion());
+        }
+    };
+
+    this.changePlayerHomeRegions = function(homeRegions) {
+        for (var i = 0; i < this.players.length; i++) {
+            this.players[i].homeRegion = this.pitch.regions[homeRegions[i]];
+        }
     };
 
     this.equals = function(team) {
