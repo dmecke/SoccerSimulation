@@ -29,6 +29,10 @@ function Player(id, team) {
         }
     };
 
+    this.isClosestTeamMemberToBall = function() {
+        return this.team.playerClosestToBall.equals(this);
+    };
+
     this.equals = function(player) {
         return this.id == player.id && this.team.equals(player.team);
     };
@@ -38,7 +42,8 @@ function Player(id, team) {
             'color': this.color,
             'position': this.position,
             'headingPosition' : this.headingPosition,
-            'currentTarget': this.steeringBehaviours.currentTarget
+            'currentTarget': this.steeringBehaviours.currentTarget,
+            'state': this.stateMachine.currentState.name
         }
     };
 }

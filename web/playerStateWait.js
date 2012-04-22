@@ -1,4 +1,5 @@
 var Vector2d = require('./vector2d');
+var PlayerStateChase = require('./playerStateChase');
 
 function PlayerStateWait() {
     this.name = 'Wait';
@@ -30,13 +31,13 @@ function PlayerStateWait() {
 //            }
 
             if (player.team.pitch.gameOn) {
-//                if (player.isClosestTeamMemberToBall() && todo
-//                    player.team.receiver == null && todo
+                if (player.isClosestTeamMemberToBall() &&
+                    player.team.receiver == null) {
 //                    !player.team.pitch.goalkeeperHasBall()) { todo
-//                    player.stateMachine.changeState(new PlayerStateChase(player));
+                    player.stateMachine.changeState(new PlayerStateChase(player));
 //
 //                    return;
-//                }
+                }
             }
         }
     };

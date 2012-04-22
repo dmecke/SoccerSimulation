@@ -30,6 +30,8 @@ io.on('render', function(pitch) {
             context.fillRect(player.headingPosition.x, player.headingPosition.y, 1, 1);
 
             context.fillRect(player.currentTarget.x - 2, player.currentTarget.y - 2, 4, 4);
+
+            context.strokeText(player.state, player.position.x, player.position.y + 4);
         });
     });
 });

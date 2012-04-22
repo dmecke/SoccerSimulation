@@ -13,10 +13,26 @@ function Team(id, pitch, color) {
     var player2 = new Player(2, this);
     this.players.push(player2);
 
+    this.playerClosestToBall = player1;
+    this.receivingPlayer = null;
+
     this.update = function() {
-        jquery.each(this.players, function(index, player) {
-            player.update();
-        });
+        for (var i = 0; i < this.players.length; i++) {
+            this.players[i].update();
+        }
+
+        this.updatePlayerClosestToBall();
+    };
+
+    this.updatePlayerClosestToBall = function() {
+        var closestToBallDistance = null;
+        for (var i = 0; i < this.players.length; i++) {
+            var thisPlayersDistanceToBall = this.players[i].position.distanceSq(this.pitch.ball.position);
+            if (closestToBallDistance == null || thisPlayersDistanceToBall  < closestToBallDistance) {
+                closestToBallDistance = thisPlayersDistanceToBall;
+                this.playerClosestToBall = this.players[i];
+            }
+        }
     };
 
     this.equals = function(team) {
