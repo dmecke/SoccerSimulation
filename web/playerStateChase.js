@@ -14,7 +14,7 @@ function PlayerStateChase() {
         var PlayerStateReturnToHomeRegion = require('./playerStateReturnToHomeRegion');
         // ball can be shooted - so do it
 //        if (player.ballWithinKickingRange()) { todo
-//            player.stateMachine.changeState(new PlayerStateKickBall(player)); todo
+//            player.stateMachine.changeState(new PlayerStateKickBall()); todo
 //            return;
 //        }
 

@@ -24,16 +24,16 @@ function PlayerStateWait() {
 
 //            player.trackBall(); //todo
 
-//            if (player.team.inControl && todo
-//                !player.isControllingPlayer && todo
+            if (player.team.inControl &&
+                !player.isControllingPlayer) {
 //                player.isAheadOfAttacker) { todo
 //                player.team.requestPass(player); todo
-//            }
+            }
 
             if (player.team.pitch.gameOn) {
                 if (player.isClosestTeamMemberToBall() &&
-                    player.team.receiver == null) {
-//                    !player.team.pitch.goalkeeperHasBall()) { todo
+                    player.team.receiver == null &&
+                    !player.team.pitch.goalkeeperHasBall()) {
                     player.stateMachine.changeState(new PlayerStateChase());
                 }
             }

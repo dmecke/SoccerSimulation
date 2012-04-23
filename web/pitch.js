@@ -45,6 +45,10 @@ function Pitch() {
         this.regions.push(new Region(new Vector2d(100, 100))); // 17
     };
 
+    this.goalkeeperHasBall = function() {
+        return this.teams[0].players[0].isControllingPlayer() || this.teams[1].players[0].isControllingPlayer();
+    };
+
     this.toJSON = function() {
         return {
             'teams': this.teams,

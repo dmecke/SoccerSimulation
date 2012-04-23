@@ -35,7 +35,7 @@ function Player(id, team) {
     };
 
     this.isControllingPlayer = function() {
-        return this.team.controllingPlayer.equals(this);
+        return this.team.controllingPlayer && this.team.controllingPlayer.equals(this);
     };
 
     this.inHomeRegion = function() {
