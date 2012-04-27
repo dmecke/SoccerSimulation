@@ -98,9 +98,6 @@ function Team(id, pitch, color) {
 
     this.canShoot = function(ballPosition, power) {
 
-//        shotTarget.add(new Vector2d(10, 10)); // debug
-//        return true; // debug
-
         var numberOfTestedTargets = 10;
 
         while (numberOfTestedTargets-- > 0) {
@@ -111,13 +108,13 @@ function Team(id, pitch, color) {
 
             shotTarget.y = parseInt(Math.random() * (maxYval - minYval + 1)) + minYval;
 
-//            var time = this.pitch.ball.timeToCoverDistance(ballPosition, shotTarget, power); todo
+            var time = this.pitch.ball.timeToCoverDistance(ballPosition, shotTarget, power);
 
-//            if (time > 0) {
+            if (time > 0) {
 //                if (isPassSafeFromAllOpponents(ballPosition, shotTarget, null, power)) { todo
                     return shotTarget;
 //                }
-//            }
+            }
         }
 
         return false;

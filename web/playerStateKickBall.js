@@ -31,8 +31,8 @@ function PlayerStateKickBall() {
 
         var shootingPower = dot * 5; // direction of the player to the ball * maxShootingForce
 
-        var shootingBallTarget = player.team.canShoot(player.team.pitch.ball.position, shootingPower, shootingBallTarget);
-        if (shootingBallTarget != false || Math.random() < 0.5) { // add a chance for a potshot
+        var shootingBallTarget = player.team.canShoot(player.team.pitch.ball.position, shootingPower);
+        if (shootingBallTarget != false) {
 //            shootingBallTarget = this.addNoiseToKick(player.team.pitch.ball.position, shootingBallTarget); todo
 
             var shootingKickDirection = shootingBallTarget.clone();
