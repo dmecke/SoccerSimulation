@@ -42,6 +42,14 @@ function Player(id, team) {
         return this.homeRegion.center.distanceSq(this.position) < 100;
     };
 
+    this.ballWithinKickingRange = function() {
+        return this.position.distanceSq(this.team.pitch.ball.position) < 100;
+    };
+
+    this.isThreatened = function() {
+        return false; // todo
+    };
+
     this.equals = function(player) {
         return this.id == player.id && this.team.equals(player.team);
     };

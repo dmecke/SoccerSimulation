@@ -6,6 +6,7 @@ function Pitch() {
     this.teams = [];
     this.ball = null;
     this.regions = [];
+    this.goals = [];
     this.gameOn = false;
 
     this.update = function() {
@@ -52,7 +53,8 @@ function Pitch() {
     this.toJSON = function() {
         return {
             'teams': this.teams,
-            'ball': this.ball
+            'ball': this.ball,
+            'goals': this.goals
         }
     };
 }

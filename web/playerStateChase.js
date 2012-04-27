@@ -1,4 +1,3 @@
-
 function PlayerStateChase() {
     this.name = 'Chase';
 
@@ -12,11 +11,14 @@ function PlayerStateChase() {
 
     this.execute = function(player) {
         var PlayerStateReturnToHomeRegion = require('./playerStateReturnToHomeRegion');
+        var PlayerStateKickBall = require('./playerStateKickBall');
+
         // ball can be shooted - so do it
-//        if (player.ballWithinKickingRange()) { todo
-//            player.stateMachine.changeState(new PlayerStateKickBall()); todo
-//            return;
-//        }
+        if (player.ballWithinKickingRange()) {
+            player.stateMachine.changeState(new PlayerStateKickBall());
+
+            return;
+        }
 
         // player is closest to ball - so update position and keep chasing
         if (player.isClosestTeamMemberToBall()) {

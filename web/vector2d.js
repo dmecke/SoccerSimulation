@@ -57,6 +57,14 @@ function Vector2d(x, y) {
         return this.x * vector2d.x + this.y * vector2d.y;
     };
 
+    this.perp = function() {
+        var vector2d = new Vector2d();
+        vector2d.x = this.y * -1;
+        vector2d.y = this.x;
+
+        return vector2d;
+    };
+
     this.truncate = function(max) {
         if (this.length() > max) {
             this.normalize();
@@ -66,6 +74,10 @@ function Vector2d(x, y) {
 
     this.log = function() {
         console.log(this.x + '|' + this.y + ' (' + this.length() + ')');
+    };
+
+    this.equals = function(vector2d) {
+        return this.x == vector2d.x && this.y == vector2d.y;
     };
 }
 
