@@ -56,6 +56,7 @@ function Player(id, team) {
 
     this.toJSON = function() {
         return {
+            'id': this.id,
             'color': this.color,
             'position': this.position,
             'headingPosition' : this.headingPosition,

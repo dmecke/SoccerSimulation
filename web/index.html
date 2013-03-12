@@ -5,6 +5,35 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
         <script type="text/javascript" src="http://nodejs.playground.cunningsoft.de:8000/socket.io/socket.io.js"></script>
         <script type="text/javascript">
+
+var showState = true;
+var showCurrentTarget = true;
+var showHeadingPosition = true;
+function toggleShowState() {
+    showState = !showState;
+    if (showState) {
+        $('#showStateButton').html('hide state');
+    } else {
+        $('#showStateButton').html('show state');
+    }
+}
+function toggleShowCurrentTarget() {
+    showCurrentTarget = !showCurrentTarget;
+    if (showCurrentTarget) {
+        $('#showCurrentTargetButton').html('hide current target');
+    } else {
+        $('#showCurrentTargetButton').html('show current target');
+    }
+}
+function toggleShowHeadingPosition() {
+    showHeadingPosition = !showHeadingPosition;
+    if (showHeadingPosition) {
+        $('#showHeadingPositionButton').html('hide heading position');
+    } else {
+        $('#showHeadingPositionButton').html('show heading position');
+    }
+}
+
 var io = io.connect('http://nodejs.playground.cunningsoft.de:8000');
 io.on('render', function(pitch) {
     console.log(pitch);
@@ -29,23 +58,33 @@ io.on('render', function(pitch) {
 
     context.fillStyle = 'rgba(255, 255, 255, 100)';
     context.fillRect(pitch.ball.position.x - 5, pitch.ball.position.y - 5, 10, 10);
-    context.fillRect(pitch.ball.headingPosition.x, pitch.ball.headingPosition.y, 1, 1);
-    context.fillRect(pitch.ball.currentTarget.x - 2, pitch.ball.currentTarget.y - 2, 4, 4);
+    if (showHeadingPosition) {
+        context.fillRect(pitch.ball.headingPosition.x, pitch.ball.headingPosition.y, 1, 1);
+    }
+    if (showCurrentTarget) {
+        context.fillRect(pitch.ball.currentTarget.x - 2, pitch.ball.currentTarget.y - 2, 4, 4);
+    }
 
     $.each(pitch.teams, function(teamIndex, team) {
         $.each(team.players, function(playerIndex, player) {
             context.fillStyle = player.color;
             context.fillRect(player.position.x - 10, player.position.y - 10, 20, 20);
 
-//            context.beginPath();
-//            context.arc(player.position.x, player.position.y, 50, 0, 2 * Math.PI);
-//            context.stroke();
+            if (showHeadingPosition) {
+                context.fillRect(player.headingPosition.x, player.headingPosition.y, 1, 1);
+            }
 
-            context.fillRect(player.headingPosition.x, player.headingPosition.y, 1, 1);
+            if (showCurrentTarget) {
+                context.fillRect(player.currentTarget.x - 2, player.currentTarget.y - 2, 4, 4);
+            }
 
-            context.fillRect(player.currentTarget.x - 2, player.currentTarget.y - 2, 4, 4);
+            context.strokeStyle = 'rgba(255, 255, 255, 100)';
+            context.strokeText(player.id, player.position.x - 2, player.position.y + 4);
 
-            context.strokeText(player.state, player.position.x, player.position.y + 4);
+            if (showState) {
+                context.strokeStyle = 'rgba(0, 0, 0, 100)';
+                context.strokeText(player.state, player.position.x + 14, player.position.y + 4);
+            }
         });
     });
 });
@@ -53,55 +92,60 @@ io.on('render', function(pitch) {
     </head>
     <body>
         <canvas id="canvas" width="1200" height="600" style="background: #d3d3d3; float: left"></canvas>
-    <table>
-        <tr>
-            <td><b>Team State Red</b></td>
-            <td id="teamStateRed"></td>
-        </tr>
-        <tr>
-            <td><b>Team State Blue</b></td>
-            <td id="teamStateBlue"></td>
-        </tr>
-        <tr>
-            <td><b>Player State Red 1</b></td>
-            <td id="playerStateRed1"></td>
-        </tr>
-        <tr>
-            <td><b>Player State Red 2</b></td>
-            <td id="playerStateRed2"></td>
-        </tr>
-        <tr>
-            <td><b>Player State Red 3</b></td>
-            <td id="playerStateRed3"></td>
-        </tr>
-        <tr>
-            <td><b>Player State Red 4</b></td>
-            <td id="playerStateRed4"></td>
-        </tr>
-        <tr>
-            <td><b>Player State Red 5</b></td>
-            <td id="playerStateRed5"></td>
-        </tr>
-        <tr>
-            <td><b>Player State Blue 1</b></td>
-            <td id="playerStateBlue1"></td>
-        </tr>
-        <tr>
-            <td><b>Player State Blue 2</b></td>
-            <td id="playerStateBlue2"></td>
-        </tr>
-        <tr>
-            <td><b>Player State Blue 3</b></td>
-            <td id="playerStateBlue3"></td>
-        </tr>
-        <tr>
-            <td><b>Player State Blue 4</b></td>
-            <td id="playerStateBlue4"></td>
-        </tr>
-        <tr>
-            <td><b>Player State Blue 5</b></td>
-            <td id="playerStateBlue5"></td>
-        </tr>
-    </table>
+        <table>
+            <tr>
+                <td><b>Team State Red</b></td>
+                <td id="teamStateRed"></td>
+            </tr>
+            <tr>
+                <td><b>Team State Blue</b></td>
+                <td id="teamStateBlue"></td>
+            </tr>
+            <tr>
+                <td><b>Player State Red 1</b></td>
+                <td id="playerStateRed1"></td>
+            </tr>
+            <tr>
+                <td><b>Player State Red 2</b></td>
+                <td id="playerStateRed2"></td>
+            </tr>
+            <tr>
+                <td><b>Player State Red 3</b></td>
+                <td id="playerStateRed3"></td>
+            </tr>
+            <tr>
+                <td><b>Player State Red 4</b></td>
+                <td id="playerStateRed4"></td>
+            </tr>
+            <tr>
+                <td><b>Player State Red 5</b></td>
+                <td id="playerStateRed5"></td>
+            </tr>
+            <tr>
+                <td><b>Player State Blue 1</b></td>
+                <td id="playerStateBlue1"></td>
+            </tr>
+            <tr>
+                <td><b>Player State Blue 2</b></td>
+                <td id="playerStateBlue2"></td>
+            </tr>
+            <tr>
+                <td><b>Player State Blue 3</b></td>
+                <td id="playerStateBlue3"></td>
+            </tr>
+            <tr>
+                <td><b>Player State Blue 4</b></td>
+                <td id="playerStateBlue4"></td>
+            </tr>
+            <tr>
+                <td><b>Player State Blue 5</b></td>
+                <td id="playerStateBlue5"></td>
+            </tr>
+        </table>
+        <ul style="list-style-type: none">
+            <li><button id="showStateButton" onclick="toggleShowState()">hide state</button></li>
+            <li><button id="showCurrentTargetButton" onclick="toggleShowCurrentTarget()">hide current target</button></li>
+            <li><button id="showHeadingPositionButton" onclick="toggleShowHeadingPosition()">hide heading position</button></li>
+        </ul>
     </body>
 </html>
