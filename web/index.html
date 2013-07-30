@@ -146,6 +146,7 @@ io.on('render', function(pitch) {
             <li><button id="showStateButton" onclick="toggleShowState()">hide state</button></li>
             <li><button id="showCurrentTargetButton" onclick="toggleShowCurrentTarget()">hide current target</button></li>
             <li><button id="showHeadingPositionButton" onclick="toggleShowHeadingPosition()">hide heading position</button></li>
+            <label for="speed">Speed</label> <input type="text" value="100" id="speed" onkeyup="io.emit('setSpeed', $('#speed').val())" />
         </ul>
     </body>
 </html>
