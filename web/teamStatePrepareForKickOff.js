@@ -1,3 +1,5 @@
+var TeamStateDefending = require('./teamStateDefending');
+
 function TeamStatePrepareForKickOff() {
     this.name = 'PrepareForKickOff';
 
@@ -22,7 +24,7 @@ function TeamStatePrepareForKickOff() {
     };
 
     this.execute = function(team) {
-        if (team.allPlayersAtHome() && team.opponent.allPlayersAtHome()) {
+        if (team.allPlayersAtHome() && team.getOpponent().allPlayersAtHome()) {
             team.stateMachine.changeState(new TeamStateDefending());
         }
     };

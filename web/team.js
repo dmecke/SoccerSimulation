@@ -42,6 +42,7 @@ function Team(id, pitch, color) {
         }
 
         this.updatePlayerClosestToBall();
+        this.stateMachine.update();
     };
 
     this.updatePlayerClosestToBall = function() {

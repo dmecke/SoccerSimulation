@@ -1,3 +1,5 @@
+var TeamStateDefending = require('./teamStateDefending');
+
 function TeamStateAttacking() {
     this.name = 'Attacking';
 
