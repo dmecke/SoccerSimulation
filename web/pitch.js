@@ -50,7 +50,8 @@ function Pitch() {
             'playingArea': this.playingArea,
             'teams': this.teams,
             'ball': this.ball,
-            'goals': this.goals
+            'redGoal': this.redGoal,
+            'blueGoal': this.blueGoal
         }
     };
 }

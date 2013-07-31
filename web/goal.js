@@ -14,7 +14,8 @@ function Goal(leftPost, rightPost, facing) {
     this.toJSON = function() {
         return {
             'leftPost': this.leftPost,
-            'rightPost': this.rightPost
+            'rightPost': this.rightPost,
+            'goalsScored': this.goalsScored
         }
     };
 }
