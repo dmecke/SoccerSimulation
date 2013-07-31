@@ -6,9 +6,9 @@ function TeamStateAttacking() {
     this.enter = function(team) {
         var homeRegions = [];
         if (team.id == 1) {
-            homeRegions = [16, 3, 5, 9, 13];
-        } else {
             homeRegions = [1, 12, 14, 6, 4];
+        } else {
+            homeRegions = [16, 3, 5, 9, 13];
         }
         team.changePlayerHomeRegions(homeRegions);
 

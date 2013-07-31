@@ -2,7 +2,7 @@ var httpServer = require('./httpServer');
 httpServer.listen(8000);
 var io = require('socket.io').listen(httpServer, { log: false });
 
-var speed = 100;
+var speed = 60;
 
 var Pitch = require('./pitch');
 var Team = require('./team');
@@ -12,13 +12,8 @@ var Vector2d = require('./vector2d');
 var TeamStatePrepareForKickOff = require('./teamStatePrepareForKickOff');
 
 var pitch = new Pitch();
+pitch.createRegions();
 
-pitch.setUpRegions();
-
-var goalRed = new Goal(new Vector2d(0, 200), new Vector2d(0, 400));
-pitch.goals.push(goalRed);
-var goalBlue = new Goal(new Vector2d(1200, 200), new Vector2d(1200, 400));
-pitch.goals.push(goalBlue);
 
 var teamRed = new Team(1, pitch, 'rgba(255, 0, 0, 100)');
 teamRed.stateMachine.changeState(new TeamStatePrepareForKickOff());

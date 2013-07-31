@@ -1,13 +1,13 @@
 var MovingEntity = require('./movingEntity');
+var Param = require('./param');
 var util = require('util');
 
 Ball.prototype = new MovingEntity();
 function Ball() {
-    MovingEntity.call(this);
-    this.radius = 10;
-    this.mass = 1;
-    this.friction = -0.015;
-    this.playerKickingAccuracy = 0.99; // range from 0 to 1 - the lower the worse the players get
+    MovingEntity.call(this, 0, -1, new Param().BallMass);
+    this.radius = new Param().BallSize;
+    this.friction = new Param().Friction;
+    this.playerKickingAccuracy = new Param().PlayerKickingAccuracy; // range from 0 to 1 - the lower the worse the players get
 
     this.update = function() {
         this.steeringBehaviours.update();

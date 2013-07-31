@@ -1,9 +1,11 @@
 var PlayerStateMachine = require('./playerStateMachine');
 var MovingEntity = require('./movingEntity');
+var Vector2d = require('./vector2d');
+var Param = require('./param');
 var util = require('util');
 
 function Player(id, team) {
-    MovingEntity.call(this);
+    MovingEntity.call(this, new Param().PlayerMaxForce, new Param().PlayerMaxSpeedWithoutBall, new Param().PlayerMass);
 
     this.id = id;
     this.color = team.color;
@@ -11,6 +13,7 @@ function Player(id, team) {
     this.neighbours = [];
     this.stateMachine = new PlayerStateMachine(this);
     this.homeRegion = null;
+    this.position = new Vector2d((this.team.pitch.playingArea.right - this.team.pitch.playingArea.left) / 2, this.team.pitch.playingArea.bottom);
 
     this.update = function() {
         this.tagNeighbours();
@@ -39,7 +42,11 @@ function Player(id, team) {
     };
 
     this.inHomeRegion = function() {
-        return this.homeRegion.center.distanceSq(this.position) < 100;
+        return this.homeRegion.center.distanceSq(this.position) < new Param().PlayerKickingDistance * new Param().PlayerKickingDistance;
+    };
+
+    this.ballWithinReceivingRange = function() {
+        return this.position.distanceSq(this.team.pitch.ball.position) < new Param().BallWithinReceivingRange * new Param().BallWithinReceivingRange;
     };
 
     this.ballWithinKickingRange = function() {

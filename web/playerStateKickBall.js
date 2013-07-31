@@ -1,4 +1,5 @@
 var Vector2d = require('./vector2d');
+var Param = require('./param');
 
 function PlayerStateKickBall() {
     this.name = 'KickBall';
@@ -18,6 +19,7 @@ function PlayerStateKickBall() {
     this.execute = function(player) {
         var PlayerStateChase = require('./playerStateChase');
         var PlayerStateWait = require('./playerStateWait');
+        var PlayerStateDribble = require('./playerStateDribble');
 
         // check whether the ball is in front or behind the player
         var toBall = player.team.pitch.ball.position.clone();
@@ -29,7 +31,7 @@ function PlayerStateKickBall() {
             player.stateMachine.changeState(new PlayerStateChase());
         }
 
-        var shootingPower = dot * 5; // direction of the player to the ball * maxShootingForce
+        var shootingPower = dot * new Param().MaxShootingForce; // direction of the player to the ball * maxShootingForce
 
         var shootingBallTarget = player.team.canShoot(player.team.pitch.ball.position, shootingPower);
         if (shootingBallTarget != false) {
@@ -48,7 +50,7 @@ function PlayerStateKickBall() {
         }
 
         var receiver = null;
-        var passingPower = dot * 5; // direction of the player to the ball * maxPassingForce
+        var passingPower = dot * new Param().MaxPassingForce; // direction of the player to the ball * maxPassingForce
 
         var passingBallTarget = new Vector2d(0, 0);
         if (player.isThreatened() && player.team.canPass(player, receiver, passingBallTarget, passingPower, 100)) { // last parameter is the minimum pass distance
@@ -61,7 +63,7 @@ function PlayerStateKickBall() {
 
             // send message to receiver
 
-            player.changeState(new PlayerStateWait());
+            player.stateMachine.changeState(new PlayerStateWait());
 
 //            player.findSupport(); todo
 
@@ -70,7 +72,7 @@ function PlayerStateKickBall() {
 
 //        player.findSupport(); todo
 
-//        player.changeState(new PlayerStateDribble()); todo
+        player.stateMachine.changeState(new PlayerStateDribble());
     };
 }
 

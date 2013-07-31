@@ -91,9 +91,17 @@ function Team(id, pitch, color) {
 
     this.getGoal = function() {
         if (this.pitch.teams[0].equals(this)) {
-            return this.pitch.goals[0];
+            return this.pitch.blueGoal;
         } else {
-            return this.pitch.goals[1];
+            return this.pitch.redGoal;
+        }
+    };
+
+    this.getHomeGoal = function() {
+        if (this.pitch.teams[0].equals(this)) {
+            return this.pitch.redGoal;
+        } else {
+            return this.pitch.blueGoal;
         }
     };
 

@@ -6,9 +6,22 @@
         <script type="text/javascript" src="http://nodejs.playground.cunningsoft.de:8000/socket.io/socket.io.js"></script>
         <script type="text/javascript">
 
+var WindowWidth = 700;
+var WindowHeight = 400;
+var GoalWidth = 100;
+
+var outputConsole = false;
 var showState = true;
 var showCurrentTarget = true;
 var showHeadingPosition = true;
+function toggleOutputConsole() {
+    outputConsole = !outputConsole;
+    if (outputConsole) {
+        $('#outputConsoleButton').html('disable output console');
+    } else {
+        $('#outputConsoleButton').html('enable output console');
+    }
+}
 function toggleShowState() {
     showState = !showState;
     if (showState) {
@@ -36,7 +49,9 @@ function toggleShowHeadingPosition() {
 
 var io = io.connect('http://nodejs.playground.cunningsoft.de:8000');
 io.on('render', function(pitch) {
-    console.log(pitch);
+    if (outputConsole) {
+        console.log(pitch);
+    }
 
     $('#teamStateRed').html(pitch.teams[0].state);
     $('#teamStateBlue').html(pitch.teams[1].state);
@@ -54,9 +69,32 @@ io.on('render', function(pitch) {
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
 
-    canvas.width = canvas.width;
+//    canvas.width = canvas.width;
 
-    context.fillStyle = 'rgba(255, 255, 255, 100)';
+    // draw field
+    context.beginPath();
+    context.fillStyle = '#006400';
+    context.fillRect(0, 0, WindowWidth, WindowHeight);
+
+    // draw field lines
+    context.beginPath();
+    context.strokeStyle = 'rgba(255, 255, 255, 1)';
+    context.rect(pitch.playingArea.left, pitch.playingArea.top, pitch.playingArea.width, pitch.playingArea.height);
+    context.moveTo(pitch.playingArea.center.x, pitch.playingArea.top);
+    context.lineTo(pitch.playingArea.center.x, pitch.playingArea.bottom);
+    context.stroke();
+    context.beginPath();
+    context.arc(pitch.playingArea.center.x, pitch.playingArea.center.y, pitch.playingArea.width * 0.125, 0, 2 * Math.PI);
+    context.stroke();
+    context.beginPath();
+    context.arc(pitch.playingArea.center.x, pitch.playingArea.center.y, 2, 0, 2 * Math.PI);
+    context.fillStyle = 'rgba(255, 255, 255, 1)';
+    context.fill();
+    context.stroke();
+
+    // draw ball
+    context.beginPath();
+    context.fillStyle = 'rgba(255, 255, 255, 1)';
     context.fillRect(pitch.ball.position.x - 5, pitch.ball.position.y - 5, 10, 10);
     if (showHeadingPosition) {
         context.fillRect(pitch.ball.headingPosition.x, pitch.ball.headingPosition.y, 1, 1);
@@ -64,6 +102,18 @@ io.on('render', function(pitch) {
     if (showCurrentTarget) {
         context.fillRect(pitch.ball.currentTarget.x - 2, pitch.ball.currentTarget.y - 2, 4, 4);
     }
+
+    // draw red goal
+    context.beginPath();
+    context.strokeStyle = 'rgba(255, 0, 0, 1)';
+    context.rect(pitch.playingArea.left, (WindowHeight - GoalWidth) / 2, 40, GoalWidth);
+    context.stroke();
+
+    // draw blue goal
+    context.beginPath();
+    context.strokeStyle = 'rgba(0, 0, 255, 1)';
+    context.rect(pitch.playingArea.right - 40, (WindowHeight - GoalWidth) / 2, 40, GoalWidth);
+    context.stroke();
 
     $.each(pitch.teams, function(teamIndex, team) {
         $.each(team.players, function(playerIndex, player) {
@@ -78,11 +128,11 @@ io.on('render', function(pitch) {
                 context.fillRect(player.currentTarget.x - 2, player.currentTarget.y - 2, 4, 4);
             }
 
-            context.strokeStyle = 'rgba(255, 255, 255, 100)';
+            context.strokeStyle = 'rgba(255, 255, 255, 1)';
             context.strokeText(player.id, player.position.x - 2, player.position.y + 4);
 
             if (showState) {
-                context.strokeStyle = 'rgba(0, 0, 0, 100)';
+                context.strokeStyle = 'rgba(0, 0, 0, 1)';
                 context.strokeText(player.state, player.position.x + 14, player.position.y + 4);
             }
         });
@@ -91,7 +141,7 @@ io.on('render', function(pitch) {
         </script>
     </head>
     <body>
-        <canvas id="canvas" width="1200" height="600" style="background: #d3d3d3; float: left"></canvas>
+        <canvas id="canvas" width="700" height="400" style="float: left"></canvas>
         <table>
             <tr>
                 <td><b>Team State Red</b></td>
@@ -143,10 +193,11 @@ io.on('render', function(pitch) {
             </tr>
         </table>
         <ul style="list-style-type: none">
+            <li><button id="outputConsoleButton" onclick="toggleOutputConsole()">enable output console</button></li>
             <li><button id="showStateButton" onclick="toggleShowState()">hide state</button></li>
             <li><button id="showCurrentTargetButton" onclick="toggleShowCurrentTarget()">hide current target</button></li>
             <li><button id="showHeadingPositionButton" onclick="toggleShowHeadingPosition()">hide heading position</button></li>
-            <label for="speed">Speed</label> <input type="text" value="100" id="speed" onkeyup="io.emit('setSpeed', $('#speed').val())" />
+            <label for="speed">Speed</label> <input type="text" value="60" id="speed" onkeyup="io.emit('setSpeed', $('#speed').val())" />
         </ul>
     </body>
 </html>

@@ -1,3 +1,5 @@
+var Param = require('./param');
+
 function PlayerStateGlobal() {
     this.name = 'Global';
 
@@ -8,6 +10,11 @@ function PlayerStateGlobal() {
     };
 
     this.execute = function(player) {
+        if (player.ballWithinReceivingRange() && player.isControllingPlayer()) {
+            player.maxSpeed = new Param().PlayerMaxSpeedWithBall;
+        } else {
+            player.maxSpeed = new Param().PlayerMaxSpeedWithoutBall;
+        }
     };
 }
 

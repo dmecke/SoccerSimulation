@@ -1,4 +1,4 @@
-function Goal(leftPost, rightPost) {
+function Goal(leftPost, rightPost, facing) {
 
     this.leftPost = leftPost;
     this.rightPost = rightPost;
@@ -7,9 +7,7 @@ function Goal(leftPost, rightPost) {
     this.center.add(rightPost);
     this.center.divide(2);
 
-    this.facing = rightPost.clone();
-    this.facing.subtract(leftPost);
-    this.facing.perp();
+    this.facing = facing;
 
     this.goalsScored = 0;
 

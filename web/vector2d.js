@@ -16,14 +16,14 @@ function Vector2d(x, y) {
         this.y = this.y - vector2d.y;
     };
 
-    this.multiply = function(divider) {
-        this.x = this.x * divider;
-        this.y = this.y * divider;
+    this.multiply = function(factor) {
+        this.x = this.x * factor;
+        this.y = this.y * factor;
     };
 
-    this.divide = function(factor) {
-        this.x = this.x / factor;
-        this.y = this.y / factor;
+    this.divide = function(divider) {
+        this.x = this.x / divider;
+        this.y = this.y / divider;
     };
 
     this.length = function() {
@@ -71,6 +71,14 @@ function Vector2d(x, y) {
             this.multiply(max);
         }
     };
+
+    this.sign = function(vector2d) {
+        if (this.y * vector2d.x > this.x * vector2d.y) {
+            return -1;
+        } else {
+            return 1;
+        }
+    }
 
     this.log = function() {
         console.log(this.x + '|' + this.y + ' (' + this.length() + ')');

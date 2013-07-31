@@ -6,9 +6,9 @@ function TeamStatePrepareForKickOff() {
     this.enter = function(team) {
         var homeRegions = [];
         if (team.id == 1) {
-            homeRegions = [16, 9, 11, 12, 14];
-        } else {
             homeRegions = [1, 6, 8, 3, 5];
+        } else {
+            homeRegions = [16, 9, 11, 12, 14];
         }
         team.changePlayerHomeRegions(homeRegions);
 

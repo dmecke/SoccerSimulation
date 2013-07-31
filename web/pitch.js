@@ -1,13 +1,19 @@
 var jquery = require('jquery');
 var Vector2d = require('./vector2d');
+var Goal = require('./goal');
+var Param = require('./param');
 var Region = require('./region');
 
 function Pitch() {
     this.teams = [];
     this.ball = null;
     this.regions = [];
-    this.goals = [];
+    this.playingArea = new Region(20, 20, new Param().WindowWidth - 20, new Param().WindowHeight - 20);
+    this.redGoal = new Goal(new Vector2d(this.playingArea.left, (new Param().WindowHeight - new Param().GoalWidth) / 2), new Vector2d(this.playingArea.left, new Param().WindowHeight - (new Param().WindowHeight - new Param().GoalWidth) / 2), new Vector2d(1, 0));
+    this.blueGoal = new Goal(new Vector2d(this.playingArea.right, (new Param().WindowHeight - new Param().GoalWidth) / 2), new Vector2d(this.playingArea.right, new Param().WindowHeight - (new Param().WindowHeight - new Param().GoalWidth) / 2), new Vector2d(-1, 0));
     this.gameOn = false;
+    this.numRegionsHorizontal = 6;
+    this.numRegionsVertical = 3;
 
     this.update = function() {
         this.ball.update();
@@ -20,30 +26,19 @@ function Pitch() {
         }
     };
 
-    this.setUpRegions = function() {
-        this.regions.push(new Region(new Vector2d(1100, 500))); // 0
-        this.regions.push(new Region(new Vector2d(1100, 300))); // 1
-        this.regions.push(new Region(new Vector2d(1100, 100))); // 2
-
-        this.regions.push(new Region(new Vector2d(900, 500))); // 3
-        this.regions.push(new Region(new Vector2d(900, 300))); // 4
-        this.regions.push(new Region(new Vector2d(900, 100))); // 5
-
-        this.regions.push(new Region(new Vector2d(700, 500))); // 6
-        this.regions.push(new Region(new Vector2d(700, 300))); // 7
-        this.regions.push(new Region(new Vector2d(700, 100))); // 8
-
-        this.regions.push(new Region(new Vector2d(500, 500))); // 9
-        this.regions.push(new Region(new Vector2d(500, 300))); // 10
-        this.regions.push(new Region(new Vector2d(500, 100))); // 11
-
-        this.regions.push(new Region(new Vector2d(300, 500))); // 12
-        this.regions.push(new Region(new Vector2d(300, 300))); // 13
-        this.regions.push(new Region(new Vector2d(300, 100))); // 14
-
-        this.regions.push(new Region(new Vector2d(100, 500))); // 15
-        this.regions.push(new Region(new Vector2d(100, 300))); // 16
-        this.regions.push(new Region(new Vector2d(100, 100))); // 17
+    this.createRegions = function() {
+        for (var col = 0; col < this.numRegionsHorizontal; ++col) {
+            for (var row = 0; row < this.numRegionsVertical; ++row) {
+                this.regions.push(
+                    new Region(
+                        this.playingArea.left + col * this.playingArea.width / this.numRegionsHorizontal,
+                        this.playingArea.top + row * this.playingArea.height / this.numRegionsVertical,
+                        this.playingArea.left + (col + 1) * this.playingArea.width / this.numRegionsHorizontal,
+                        this.playingArea.top + (row + 1) * this.playingArea.height / this.numRegionsVertical
+                    )
+                );
+            }
+        }
     };
 
     this.goalkeeperHasBall = function() {
@@ -52,6 +47,7 @@ function Pitch() {
 
     this.toJSON = function() {
         return {
+            'playingArea': this.playingArea,
             'teams': this.teams,
             'ball': this.ball,
             'goals': this.goals
