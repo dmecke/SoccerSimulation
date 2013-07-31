@@ -27,16 +27,20 @@ function MovingEntity(maxForce, maxSpeed, mass) {
     this.updatePosition = function() {
         this.position.add(this.velocity);
         if (this.position.x > 680) {
-            this.position.x = 680;
+            this.position.x = 680 - (this.position.x - 680);
+            this.velocity.x *= -1;
         }
         if (this.position.x < 20) {
-            this.position.x = 20;
+            this.position.x = 20 + (20 - this.position.x);
+            this.velocity.x *= -1;
         }
         if (this.position.y > 380) {
-            this.position.y = 380;
+            this.position.y = 380 - (this.position.y - 380);
+            this.velocity.y *= -1;
         }
         if (this.position.y < 20) {
-            this.position.y = 20;
+            this.position.y = 20 + (20 - this.position.y);
+            this.velocity.y *= -1;
         }
     };
 
