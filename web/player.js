@@ -62,51 +62,6 @@ function Player(id, team) {
         toTarget.subtract(this.position);
         toTarget.normalize();
         this.heading = toTarget;
-
-//        var toTarget = this.team.pitch.ball.clone();
-//        toTarget = toTarget.subtract(this.position);
-//        toTarget.normalize();
-//
-//        var angle = Math.acos(this.heading.dot(toTarget));
-//
-//        if (angle < 0.00001) {
-//            return true;
-//        }
-//
-//        if (angle > new Param().PlayerMaxTurnRate) {
-//            angle = new Param().PlayerMaxTurnRate;
-//        }
-//        //first determine the angle between the heading vector and the target
-//        double angle = Math.acos(m_vHeading.Dot(toTarget));
-//
-//        //sometimes m_vHeading.Dot(toTarget) == 1.000000002
-//        if(Double.isNaN(angle)) {
-//            angle = 0;
-//        }
-//        //return true if the player is facing the target
-//        if (angle < 0.00001) {
-//            return true;
-//        }
-//
-//        //clamp the amount to turn to the max turn rate
-//        if (angle > m_dMaxTurnRate) {
-//            angle = m_dMaxTurnRate;
-//        }
-//
-//        //The next few lines use a rotation matrix to rotate the player's heading
-//        //vector accordingly
-//        C2DMatrix RotationMatrix = new C2DMatrix();
-//
-//        //notice how the direction of rotation has to be determined when creating
-//        //the rotation matrix
-//        RotationMatrix.Rotate(angle * m_vHeading.Sign(toTarget));
-//        RotationMatrix.TransformVector2Ds(m_vHeading);
-//        RotationMatrix.TransformVector2Ds(m_vVelocity);
-//
-//        //finally recreate m_vSide
-//        m_vSide = m_vHeading.Perp();
-//
-//        return false;
     };
 
     this.equals = function(player) {
