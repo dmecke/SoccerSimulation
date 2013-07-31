@@ -14,7 +14,6 @@ var TeamStatePrepareForKickOff = require('./teamStatePrepareForKickOff');
 var pitch = new Pitch();
 pitch.createRegions();
 
-
 var teamRed = new Team(1, pitch, 'rgba(255, 0, 0, 100)');
 teamRed.stateMachine.changeState(new TeamStatePrepareForKickOff());
 pitch.teams.push(teamRed);

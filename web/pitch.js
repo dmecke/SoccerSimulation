@@ -1,6 +1,7 @@
 var jquery = require('jquery');
 var Vector2d = require('./vector2d');
 var Goal = require('./goal');
+var TeamStatePrepareForKickOff = require('./teamStatePrepareForKickOff');
 var Param = require('./param');
 var Region = require('./region');
 
@@ -23,6 +24,16 @@ function Pitch() {
 
         if (!this.gameOn && this.teams[0].allPlayersAtHome() && this.teams[1].allPlayersAtHome()) {
             this.gameOn = true;
+        }
+
+        if (this.blueGoal.scored(this.ball) || this.redGoal.scored(this.ball)) {
+            this.gameOn = false;
+
+            this.ball.position = new Vector2d(this.playingArea.center.x, this.playingArea.center.y);
+            this.ball.velocity = new Vector2d(0, 0);
+
+            this.teams[0].stateMachine.changeState(new TeamStatePrepareForKickOff());
+            this.teams[1].stateMachine.changeState(new TeamStatePrepareForKickOff());
         }
     };
 

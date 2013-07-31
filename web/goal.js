@@ -11,6 +11,16 @@ function Goal(leftPost, rightPost, facing) {
 
     this.goalsScored = 0;
 
+    this.scored = function(ball) {
+        if ((this.facing.x > 0 && ball.position.x < this.center.x) || (this.facing.x < 0 && ball.position.x > this.center.x)) {
+            this.goalsScored++;
+
+            return true;
+        }
+
+        return false;
+    };
+
     this.toJSON = function() {
         return {
             'leftPost': this.leftPost,

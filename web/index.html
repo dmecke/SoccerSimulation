@@ -107,9 +107,9 @@ io.on('render', function(pitch) {
     // draw score
     context.beginPath();
     context.strokeStyle = 'red';
-    context.strokeText('Red: ' + pitch.redGoal.goalsScored, WindowWidth / 2 - 50, WindowHeight - 6);
+    context.strokeText('Red: ' + pitch.blueGoal.goalsScored, WindowWidth / 2 - 50, WindowHeight - 6);
     context.strokeStyle = 'blue';
-    context.strokeText('Blue: ' + pitch.blueGoal.goalsScored, WindowWidth / 2 + 10, WindowHeight - 6);
+    context.strokeText('Blue: ' + pitch.redGoal.goalsScored, WindowWidth / 2 + 10, WindowHeight - 6);
 
     $.each(pitch.teams, function(teamIndex, team) {
         $.each(team.players, function(playerIndex, player) {
