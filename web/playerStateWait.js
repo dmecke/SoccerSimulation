@@ -22,7 +22,7 @@ function PlayerStateWait() {
 
             player.velocity = new Vector2d(0, 0);
 
-//            player.trackBall(); //todo
+            player.trackBall();
 
             if (player.team.inControl &&
                 !player.isControllingPlayer) {

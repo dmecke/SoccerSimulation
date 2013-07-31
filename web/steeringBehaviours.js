@@ -147,7 +147,6 @@ function SteeringBehaviours(entity) {
         this.entity.updateVelocity(steeringForce);
         this.entity.updatePosition();
         this.entity.updateHeading();
-        this.entity.updateHeadingPosition();
     };
 
     this.isAtCurrentTarget = function() {

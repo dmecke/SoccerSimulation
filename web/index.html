@@ -13,7 +13,6 @@ var GoalWidth = 100;
 var outputConsole = false;
 var showState = true;
 var showCurrentTarget = true;
-var showHeadingPosition = true;
 function toggleOutputConsole() {
     outputConsole = !outputConsole;
     if (outputConsole) {
@@ -36,14 +35,6 @@ function toggleShowCurrentTarget() {
         $('#showCurrentTargetButton').html('hide current target');
     } else {
         $('#showCurrentTargetButton').html('show current target');
-    }
-}
-function toggleShowHeadingPosition() {
-    showHeadingPosition = !showHeadingPosition;
-    if (showHeadingPosition) {
-        $('#showHeadingPositionButton').html('hide heading position');
-    } else {
-        $('#showHeadingPositionButton').html('show heading position');
     }
 }
 
@@ -94,11 +85,9 @@ io.on('render', function(pitch) {
 
     // draw ball
     context.beginPath();
+    context.arc(pitch.ball.position.x, pitch.ball.position.y, 5, 0, 2 * Math.PI);
     context.fillStyle = 'rgba(255, 255, 255, 1)';
-    context.fillRect(pitch.ball.position.x - 5, pitch.ball.position.y - 5, 10, 10);
-    if (showHeadingPosition) {
-        context.fillRect(pitch.ball.headingPosition.x, pitch.ball.headingPosition.y, 1, 1);
-    }
+    context.fill();
     if (showCurrentTarget) {
         context.fillRect(pitch.ball.currentTarget.x - 2, pitch.ball.currentTarget.y - 2, 4, 4);
     }
@@ -124,23 +113,35 @@ io.on('render', function(pitch) {
 
     $.each(pitch.teams, function(teamIndex, team) {
         $.each(team.players, function(playerIndex, player) {
-            context.fillStyle = player.color;
-            context.fillRect(player.position.x - 10, player.position.y - 10, 20, 20);
-
-            if (showHeadingPosition) {
-                context.fillRect(player.headingPosition.x, player.headingPosition.y, 1, 1);
-            }
+            context.save();
+            context.translate(player.position.x, player.position.y);
+            context.rotate(Math.atan2(player.heading.x, -player.heading.y));
+            context.beginPath();
+            context.strokeStyle = player.color;
+            context.moveTo(-8, 3);
+            context.lineTo(8, 3);
+            context.lineTo(10, -3);
+            context.lineTo(-10, -3);
+            context.lineTo(-8, 3);
+            context.stroke();
+            context.beginPath();
+            context.arc(0, 0, 6, 0, 2 * Math.PI);
+            context.fillStyle = '#855a00';
+            context.fill();
+            context.stroke();
+            context.restore();
 
             if (showCurrentTarget) {
                 context.fillRect(player.currentTarget.x - 2, player.currentTarget.y - 2, 4, 4);
             }
 
-            context.strokeStyle = 'rgba(255, 255, 255, 1)';
-            context.strokeText(player.id, player.position.x - 2, player.position.y + 4);
+            context.font = '12px Verdana'
+            context.strokeStyle = '#00aa00';
+            context.strokeText(player.id, player.position.x - 10, player.position.y - 12);
 
             if (showState) {
-                context.strokeStyle = 'rgba(0, 0, 0, 1)';
-                context.strokeText(player.state, player.position.x + 14, player.position.y + 4);
+                context.strokeStyle = '#00aa00';
+                context.strokeText(player.state, player.position.x, player.position.y - 12);
             }
         });
     });
@@ -203,7 +204,6 @@ io.on('render', function(pitch) {
             <li><button id="outputConsoleButton" onclick="toggleOutputConsole()">enable output console</button></li>
             <li><button id="showStateButton" onclick="toggleShowState()">hide state</button></li>
             <li><button id="showCurrentTargetButton" onclick="toggleShowCurrentTarget()">hide current target</button></li>
-            <li><button id="showHeadingPositionButton" onclick="toggleShowHeadingPosition()">hide heading position</button></li>
             <label for="speed">Speed</label> <input type="text" value="60" id="speed" onkeyup="io.emit('setSpeed', $('#speed').val())" />
         </ul>
     </body>

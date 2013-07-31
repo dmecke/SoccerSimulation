@@ -14,6 +14,7 @@ function Param() {
     this.PlayerMaxForce = 1;
     this.PlayerMaxSpeedWithBall = 1.2;
     this.PlayerMaxSpeedWithoutBall = 1.6;
+    this.PlayerMaxTurnRate = 0.4;
 
     this.PlayerKickingAccuracy = 0.99;
 

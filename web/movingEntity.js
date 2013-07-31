@@ -9,8 +9,6 @@ function MovingEntity(maxForce, maxSpeed, mass) {
     this.velocity = new Vector2d(0, 0);
     this.steeringBehaviours = new SteeringBehaviours(this);
     this.heading = new Vector2d(0, 15);
-    this.headingPosition = this.position.clone();
-    this.headingPosition.add(this.heading);
 
     this.updateVelocity = function(steeringForce) {
         this.velocity.add(steeringForce);
@@ -20,8 +18,10 @@ function MovingEntity(maxForce, maxSpeed, mass) {
     };
 
     this.updateHeading = function() {
-        this.heading = this.velocity.clone();
-        this.heading.normalize();
+        if (this.velocity.lengthSq() > 0) {
+            this.heading = this.velocity.clone();
+            this.heading.normalize();
+        }
     };
 
     this.updatePosition = function() {
@@ -42,13 +42,6 @@ function MovingEntity(maxForce, maxSpeed, mass) {
             this.position.y = 20 + (20 - this.position.y);
             this.velocity.y *= -1;
         }
-    };
-
-    this.updateHeadingPosition = function() {
-        this.headingPosition = this.position.clone();
-        var headingClone = this.heading.clone();
-        headingClone.multiply(15);
-        this.headingPosition.add(headingClone);
     };
 }
 

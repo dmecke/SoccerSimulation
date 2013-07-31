@@ -52,7 +52,6 @@ function Ball() {
         return {
             'color': this.color,
             'position': this.position,
-            'headingPosition' : this.headingPosition,
             'currentTarget': this.steeringBehaviours.currentTarget
         }
     };
