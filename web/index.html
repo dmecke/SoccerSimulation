@@ -204,7 +204,13 @@ io.on('render', function(pitch) {
             <li><button id="outputConsoleButton" onclick="toggleOutputConsole()">enable output console</button></li>
             <li><button id="showStateButton" onclick="toggleShowState()">hide state</button></li>
             <li><button id="showCurrentTargetButton" onclick="toggleShowCurrentTarget()">hide current target</button></li>
-            <label for="speed">Speed</label> <input type="text" value="60" id="speed" onkeyup="io.emit('setSpeed', $('#speed').val())" />
+            <li>
+                <button onclick="io.emit('setFps', 60); $('#fps').html(60);">60 FPS</button>
+                <button onclick="io.emit('setFps', 30); $('#fps').html(30);">30 FPS</button>
+                <button onclick="io.emit('setFps', 10); $('#fps').html(10);">10 FPS</button>
+                <button onclick="io.emit('setFps', 1); $('#fps').html(1);">1 FPS</button>
+                <div>currently: <span id="fps">60</span>FPS</div>
+            </li>
         </ul>
     </body>
 </html>

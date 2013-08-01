@@ -2,12 +2,11 @@ var httpServer = require('./httpServer');
 httpServer.listen(8000);
 var io = require('socket.io').listen(httpServer, { log: false });
 
-var speed = 60;
+var fps = 60;
 
 var Pitch = require('./pitch');
 var Team = require('./team');
 var Ball = require('./ball');
-var Goal = require('./goal');
 var Vector2d = require('./vector2d');
 var TeamStatePrepareForKickOff = require('./teamStatePrepareForKickOff');
 
@@ -29,19 +28,19 @@ io.sockets.on('connection', function(socket) {
     socket.on('disconnect', function() {
         console.log('socket ' + socket.id + ' disconnected');
     });
-    socket.on('setSpeed', function(speed) {
+    socket.on('setFps', function(fps) {
         clearInterval(updateInterval);
-        startInterval(speed);
+        updateInterval = startInterval(fps);
     });
 });
 
-function startInterval(speed) {
+function startInterval(fps) {
     var updateInterval = setInterval(function() {
 //        console.log('tick (' + io.sockets.clients().length + ' clients connected)');
         pitch.update();
         io.sockets.emit('render', pitch);
-    }, speed);
+    }, Math.round(1000 / fps));
 
     return updateInterval;
 }
-var updateInterval = startInterval(speed);
+var updateInterval = startInterval(fps);
