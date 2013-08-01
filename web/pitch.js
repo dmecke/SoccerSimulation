@@ -62,7 +62,8 @@ function Pitch() {
             'teams': this.teams,
             'ball': this.ball,
             'redGoal': this.redGoal,
-            'blueGoal': this.blueGoal
+            'blueGoal': this.blueGoal,
+            'regions': this.regions
         }
     };
 }

@@ -13,6 +13,7 @@ var GoalWidth = 100;
 var outputConsole = false;
 var showState = true;
 var showCurrentTarget = true;
+var showRegions = false;
 function toggleOutputConsole() {
     outputConsole = !outputConsole;
     if (outputConsole) {
@@ -35,6 +36,14 @@ function toggleShowCurrentTarget() {
         $('#showCurrentTargetButton').html('hide current target');
     } else {
         $('#showCurrentTargetButton').html('show current target');
+    }
+}
+function toggleShowRegions() {
+    showRegions = !showRegions;
+    if (showRegions) {
+        $('#showRegionsButton').html('hide regions');
+    } else {
+        $('#showRegionsButton').html('show regions');
     }
 }
 
@@ -60,12 +69,22 @@ io.on('render', function(pitch) {
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
 
-//    canvas.width = canvas.width;
-
     // draw field
     context.beginPath();
     context.fillStyle = '#006400';
     context.fillRect(0, 0, WindowWidth, WindowHeight);
+
+    //draw regions
+    if (showRegions) {
+        $.each(pitch.regions, function(regionIndex, region) {
+            context.beginPath();
+            context.strokeStyle = 'rgba(255, 255, 255, 1)';
+            context.rect(region.left, region.top, region.width, region.height);
+            context.stroke();
+            context.beginPath();
+            context.strokeText(regionIndex, region.center.x, region.center.y);
+        });
+    }
 
     // draw field lines
     context.beginPath();
@@ -204,6 +223,7 @@ io.on('render', function(pitch) {
             <li><button id="outputConsoleButton" onclick="toggleOutputConsole()">enable output console</button></li>
             <li><button id="showStateButton" onclick="toggleShowState()">hide state</button></li>
             <li><button id="showCurrentTargetButton" onclick="toggleShowCurrentTarget()">hide current target</button></li>
+            <li><button id="showRegionsButton" onclick="toggleShowRegions()">show regions</button></li>
             <li>
                 <button onclick="io.emit('setFps', 60); $('#fps').html(60);">60 FPS</button>
                 <button onclick="io.emit('setFps', 30); $('#fps').html(30);">30 FPS</button>
