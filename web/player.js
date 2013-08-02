@@ -28,10 +28,6 @@ function Player(id, team) {
         }
     };
 
-    this.isClosestTeamMemberToBall = function() {
-        return this.team.playerClosestToBall.equals(this);
-    };
-
     this.ballWithinKickingRange = function() {
         return this.position.distanceSq(this.team.pitch.ball.position) < 100;
     };

@@ -33,7 +33,7 @@ function PlayerStateWait() {
             if (player.team.pitch.gameOn) {
                 if (player.isClosestTeamMemberToBall() &&
                     player.team.receiver == null &&
-                    !player.team.pitch.goalkeeperHasBall()) {
+                    !player.team.pitch.goalkeeperHasBall) {
                     player.stateMachine.changeState(new PlayerStateChase());
                 }
             }

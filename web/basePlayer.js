@@ -45,6 +45,14 @@ function BasePlayer(id, team) {
     this.isControllingPlayer = function() {
         return this.team.controllingPlayer && this.team.controllingPlayer.equals(this);
     };
+
+    this.isClosestTeamMemberToBall = function() {
+        return this.team.playerClosestToBall.equals(this);
+    };
+
+    this.isClosestPlayerOnPitchToBall = function() {
+        return this.isClosestTeamMemberToBall() && this.position.distanceSq(this.team.pitch.ball) < this.team.getOpponent().playerClosestToBall.position.distanceSq(this.team.pitch.ball);
+    }
 }
 util.inherits(BasePlayer, MovingEntity);
 

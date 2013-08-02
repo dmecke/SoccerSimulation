@@ -16,6 +16,7 @@ function Pitch() {
     this.gameOn = false;
     this.numRegionsHorizontal = 6;
     this.numRegionsVertical = 3;
+    this.goalkeeperHasBall = false;
 
     this.update = function() {
         this.ball.update();
@@ -51,10 +52,6 @@ function Pitch() {
                 );
             }
         }
-    };
-
-    this.goalkeeperHasBall = function() {
-        return this.teams[0].players[0].isControllingPlayer() || this.teams[1].players[0].isControllingPlayer();
     };
 
     this.toJSON = function() {

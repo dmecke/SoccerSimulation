@@ -27,7 +27,7 @@ function PlayerStateKickBall() {
         toBall.normalize();
         var dot = player.heading.dot(toBall);
 
-        if (player.team.receivingPlayer != null || player.team.pitch.goalkeeperHasBall() || dot < 0) {
+        if (player.team.receivingPlayer != null || player.team.pitch.goalkeeperHasBall || dot < 0) {
             player.stateMachine.changeState(new PlayerStateChase());
         }
 

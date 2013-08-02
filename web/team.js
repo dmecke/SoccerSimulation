@@ -73,9 +73,7 @@ function Team(id, pitch, color) {
 
     this.returnAllFieldPlayersToHome = function() {
         for (var i = 0; i < this.players.length; i++) {
-            if (this.players[i].isGoalkeeper) {
-                this.players[i].stateMachine.changeState(new GoalkeeperStateReturnHome());
-            } else {
+            if (!this.players[i].isGoalkeeper) {
                 this.players[i].stateMachine.changeState(new PlayerStateReturnToHomeRegion());
             }
         }

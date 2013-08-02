@@ -14,17 +14,17 @@ function GoalkeeperStateTendGoal() {
         goalkeeper.steeringBehaviours.currentTarget = goalkeeper.getRearInterposeTarget();
 
         if (goalkeeper.ballWithinReceivingRange()) {
-//            @todo
-//            goalkeeper.ball.trap();
-//            goalkeeper.pitch.goalkeeperHasBall = true;
-//            goalkeeper.stateMachine.changeState(new GoalkeeperStatePutBallBackInPlay());
+            goalkeeper.team.pitch.ball.trap();
+            goalkeeper.team.pitch.goalkeeperHasBall = true;
+            var GoalkeeperStatePutBallBackInPlay = require('./goalkeeperStatePutBallBackInPlay');
+            goalkeeper.stateMachine.changeState(new GoalkeeperStatePutBallBackInPlay());
 
             return;
         }
 
         if (goalkeeper.ballWithinRangeForIntercept()) {
-//            @todo
-//            goalkeeper.stateMachine.changeState(new GoalkeeperStateInterceptBall());
+            var GoalkeeperStateInterceptBall = require('./goalkeeperStateInterceptBall');
+            goalkeeper.stateMachine.changeState(new GoalkeeperStateInterceptBall());
         }
 
         if (goalkeeper.tooFarFromGoalMouth() && goalkeeper.team.inControl()) {

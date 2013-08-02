@@ -48,6 +48,23 @@ function Ball() {
         return (v - speed) / this.friction;
     };
 
+    this.trap = function()
+    {
+        this.velocity.zero();
+    };
+
+    this.futurePosition = function(time) {
+        var ballVelocity = this.velocity.clone();
+        var ut = ballVelocity.multiply(time);
+        var half_a_t_squared = 0.5 * this.friction * time * time;
+        var ballVelocity2 = this.velocity.clone();
+        var scalarToVector = ballVelocity2.normalize().multiply(half_a_t_squared);
+
+        var ballPosition = this.position.clone();
+
+        return ballPosition.add(ut).add(scalarToVector);
+    };
+
     this.toJSON = function() {
         return {
             'color': this.color,

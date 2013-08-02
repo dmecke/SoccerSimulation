@@ -43,6 +43,11 @@ function MovingEntity(maxForce, maxSpeed, mass) {
             this.velocity.y *= -1;
         }
     };
+
+    this.speed = function()
+    {
+        return this.velocity.length();
+    };
 }
 
 module.exports = MovingEntity;

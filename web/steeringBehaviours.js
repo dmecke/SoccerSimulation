@@ -70,27 +70,18 @@ function SteeringBehaviours(entity) {
         return this.arriveSteeringForce(ballPosition.subtract(target).normalize().multiply(distanceFromTarget).add(target), 1);
     };
 
-    this.pursuitSteeringForce = function(evader) {
+    this.pursuitSteeringForce = function(ball) {
+        var ballPosition = ball.position.clone();
+        var toBall = ballPosition.subtract(this.entity.position);
+        var lookAheadTime = 0;
 
-        // calculate the vector to the evader
-        var toEvader = evader.position.clone();
-        toEvader.subtract(this.entity.position);
-
-        // calculate whether the evader is right in front of use and heading (acos 0.95 = 18 degs)
-        var relativeHeading = this.entity.heading.dot(evader.heading);
-        if (toEvader.dot(this.entity.heading) > 0 && relativeHeading < -0.95) {
-            return this.seekSteeringForce(evader.position);
+        if (ball.speed() != 0) {
+            lookAheadTime = toBall.length() / ball.speed();
         }
 
-        var evaderLength = evader.position.length();
-        var lookAheadTime = evaderLength / (this.entity.maxSpeed + evader.velocity.length());
+        var target = ball.futurePosition(lookAheadTime);
 
-        var seekTarget = evader.position.clone();
-        var evaderVelocity = evader.velocity.clone();
-        evaderVelocity.multiply(lookAheadTime);
-        seekTarget.add(evaderVelocity);
-
-        return this.seekSteeringForce(seekTarget);
+        return this.arriveSteeringForce(target, 1);
     };
 
     this.update = function() {
@@ -108,7 +99,7 @@ function SteeringBehaviours(entity) {
             steeringForce.add(this.interposeSteeringForce(this.entity.team.pitch.ball, this.currentTarget, new Param().GoalKeeperTendingDistance));
         }
         if (this.pursuit) {
-            steeringForce.add(this.pursuitSteeringForce(this.entity.team.players[0]));
+            steeringForce.add(this.pursuitSteeringForce(this.entity.team.pitch.ball));
         }
 
         steeringForce.truncate(this.entity.maxForce);

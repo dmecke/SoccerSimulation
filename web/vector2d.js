@@ -92,6 +92,14 @@ function Vector2d(x, y) {
         }
     };
 
+    this.zero = function()
+    {
+        this.x = 0;
+        this.y = 0;
+
+        return this;
+    };
+
     this.log = function() {
         console.log(this.x + '|' + this.y + ' (' + this.length() + ')');
     };
