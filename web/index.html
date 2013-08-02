@@ -107,9 +107,6 @@ io.on('render', function(pitch) {
     context.arc(pitch.ball.position.x, pitch.ball.position.y, 5, 0, 2 * Math.PI);
     context.fillStyle = 'rgba(255, 255, 255, 1)';
     context.fill();
-    if (showCurrentTarget) {
-        context.fillRect(pitch.ball.currentTarget.x - 2, pitch.ball.currentTarget.y - 2, 4, 4);
-    }
 
     // draw red goal
     context.beginPath();

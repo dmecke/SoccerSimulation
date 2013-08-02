@@ -3,7 +3,7 @@ var Param = require('./param');
 
 function SteeringBehaviours(entity) {
     this.entity = entity;
-    this.currentTarget = new Vector2d(600, 300);
+    this.currentTarget = null;
     this.seek = false;
     this.arrive = false;
     this.separation = false;

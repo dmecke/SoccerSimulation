@@ -67,8 +67,7 @@ function Ball() {
     this.toJSON = function() {
         return {
             'color': this.color,
-            'position': this.position,
-            'currentTarget': this.steeringBehaviours.currentTarget
+            'position': this.position
         }
     };
 }
