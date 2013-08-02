@@ -15,7 +15,9 @@ function GoalkeeperStatePutBallBackInPlay() {
 
     this.execute = function(goalkeeper) {
         // @todo (passing not yet implemented)
-        goalkeeper.team.pitch.ball.kick(goalkeeper.team.pitch.playingArea.center, new Param().MaxShootingForce); // @todo remove this, its a temporary replacement for the missing passing above
+        var target = goalkeeper.team.pitch.playingArea.center.clone();
+        target.subtract(goalkeeper.team.pitch.ball.position);
+        goalkeeper.team.pitch.ball.kick(target, new Param().MaxShootingForce); // @todo remove this, its a temporary replacement for the missing passing above
         goalkeeper.team.pitch.goalkeeperHasBall = false;
         var GoalkeeperStateTendGoal = require('./goalkeeperStateTendGoal');
         goalkeeper.stateMachine.changeState(new GoalkeeperStateTendGoal());

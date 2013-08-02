@@ -14,6 +14,7 @@ function Region(left, top, right, bottom) {
             'left': this.left,
             'right': this.right,
             'top': this.top,
+            'bottom': this.bottom,
             'width': this.width,
             'height': this.height,
             'center': this.center

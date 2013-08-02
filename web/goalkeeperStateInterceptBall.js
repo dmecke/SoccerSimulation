@@ -12,7 +12,7 @@ function GoalkeeperStateInterceptBall() {
     this.execute = function(goalkeeper) {
         if (goalkeeper.tooFarFromGoalMouth() && !goalkeeper.isClosestPlayerOnPitchToBall()) {
             var GoalkeeperStateReturnHome = require('./goalkeeperStateReturnHome');
-            goalkeeper.stateMachine.changeState(new GoalkeeperStateReturnHome())
+            goalkeeper.stateMachine.changeState(new GoalkeeperStateReturnHome());
         }
 
         if (goalkeeper.ballWithinReceivingRange()) {

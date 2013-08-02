@@ -61,7 +61,6 @@ function Ball() {
         var scalarToVector = ballVelocity2.normalize().multiply(half_a_t_squared);
 
         var ballPosition = this.position.clone();
-
         return ballPosition.add(ut).add(scalarToVector);
     };
 
