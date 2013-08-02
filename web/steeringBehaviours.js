@@ -1,4 +1,5 @@
 var Vector2d = require('./vector2d');
+var Param = require('./param');
 
 function SteeringBehaviours(entity) {
     this.entity = entity;
@@ -63,36 +64,10 @@ function SteeringBehaviours(entity) {
         return steeringForce;
     };
 
-    this.interposeSteeringForce = function(playerA, playerB) {
+    this.interposeSteeringForce = function(ball, target, distanceFromTarget) {
+        var ballPosition = ball.position.clone();
 
-        // calculate the current midpoint of both target players
-        var currentMidpoint = playerA.position.clone();
-        currentMidpoint.add(playerB.position);
-        currentMidpoint.divide(2);
-
-        // calculate the time to reach this current midpoint
-        var distanceToCurrentMidpoint = this.entity.position.distance(currentMidpoint);
-        var timeToReachCurrentMidpoint = distanceToCurrentMidpoint / this.entity.maxSpeed;
-
-        // calculate player a's position after the needed time when it goes streight on
-        var playerAFuturePosition = playerA.position.clone();
-        var playerADistance = playerA.velocity.clone();
-        playerADistance.multiply(timeToReachCurrentMidpoint);
-        playerAFuturePosition.add(playerADistance);
-
-        // calculate player b's position after the needed time when it goes streight on
-        var playerBFuturePosition = playerB.position.clone();
-        var playerBDistance = playerB.velocity.clone();
-        playerBDistance.multiply(timeToReachCurrentMidpoint);
-        playerBFuturePosition.add(playerBDistance);
-
-        // calculate future midpoint
-        var midpoint = playerAFuturePosition.clone();
-        midpoint.add(playerBFuturePosition);
-        midpoint.divide(2);
-
-        // arrive fast at the calculated position
-        return this.arriveSteeringForce(midpoint, 1)
+        return this.arriveSteeringForce(ballPosition.subtract(target).normalize().multiply(distanceFromTarget).add(target), 1);
     };
 
     this.pursuitSteeringForce = function(evader) {
@@ -119,11 +94,6 @@ function SteeringBehaviours(entity) {
     };
 
     this.update = function() {
-//        if (this.isAtCurrentTarget()) {
-//            this.currentTarget.x = Math.random() * 1200;
-//            this.currentTarget.y = Math.random() * 600;
-//        }
-
         var steeringForce = new Vector2d(0, 0);
         if (this.seek) {
             steeringForce.add(this.seekSteeringForce(this.currentTarget));
@@ -135,7 +105,7 @@ function SteeringBehaviours(entity) {
             steeringForce.add(this.separationSteeringForce());
         }
         if (this.interpose) {
-            steeringForce.add(this.interposeSteeringForce(this.entity.team.players[0], this.entity.team.players[1]));
+            steeringForce.add(this.interposeSteeringForce(this.entity.team.pitch.ball, this.currentTarget, new Param().GoalKeeperTendingDistance));
         }
         if (this.pursuit) {
             steeringForce.add(this.pursuitSteeringForce(this.entity.team.players[0]));

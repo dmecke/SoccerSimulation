@@ -9,21 +9,29 @@ function Vector2d(x, y) {
     this.add = function(vector2d) {
         this.x = this.x + vector2d.x;
         this.y = this.y + vector2d.y;
+
+        return this;
     };
 
     this.subtract = function(vector2d) {
         this.x = this.x - vector2d.x;
         this.y = this.y - vector2d.y;
+
+        return this;
     };
 
     this.multiply = function(factor) {
         this.x = this.x * factor;
         this.y = this.y * factor;
+
+        return this;
     };
 
     this.divide = function(divider) {
         this.x = this.x / divider;
         this.y = this.y / divider;
+
+        return this;
     };
 
     this.length = function() {
@@ -51,6 +59,8 @@ function Vector2d(x, y) {
             this.x = this.x / length;
             this.y = this.y / length;
         }
+
+        return this;
     };
 
     this.dot = function(vector2d) {
@@ -70,6 +80,8 @@ function Vector2d(x, y) {
             this.normalize();
             this.multiply(max);
         }
+
+        return this;
     };
 
     this.sign = function(vector2d) {
@@ -78,7 +90,7 @@ function Vector2d(x, y) {
         } else {
             return 1;
         }
-    }
+    };
 
     this.log = function() {
         console.log(this.x + '|' + this.y + ' (' + this.length() + ')');
