@@ -135,10 +135,10 @@ function SteeringBehaviours(entity) {
             steeringForce.add(this.separationSteeringForce());
         }
         if (this.interpose) {
-            steeringForce.add(this.interposeSteeringForce(this.entity.team.pitch.players[0], this.entity.team.pitch.players[1]));
+            steeringForce.add(this.interposeSteeringForce(this.entity.team.players[0], this.entity.team.players[1]));
         }
         if (this.pursuit) {
-            steeringForce.add(this.pursuitSteeringForce(this.entity.team.pitch.players[0]));
+            steeringForce.add(this.pursuitSteeringForce(this.entity.team.players[0]));
         }
 
         steeringForce.truncate(this.entity.maxForce);

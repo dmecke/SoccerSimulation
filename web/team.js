@@ -1,6 +1,8 @@
 var Vector2d = require('./vector2d');
 var Player = require('./player');
+var Goalkeeper = require('./goalkeeper');
 var TeamStateMachine = require('./teamStateMachine');
+var GoalkeeperStateReturnHome = require('./goalkeeperStateReturnHome');
 var PlayerStateWait = require('./playerStateWait');
 var PlayerStateReturnToHomeRegion = require('./playerStateReturnToHomeRegion');
 
@@ -11,8 +13,8 @@ function Team(id, pitch, color) {
     this.stateMachine = new TeamStateMachine(this);
     this.players = [];
 
-    var player1 = new Player(1, this);
-    player1.stateMachine.changeState(new PlayerStateWait());
+    var player1 = new Goalkeeper(1, this);
+    player1.stateMachine.changeState(new GoalkeeperStateReturnHome());
     this.players.push(player1);
 
     var player2 = new Player(2, this);
@@ -71,7 +73,11 @@ function Team(id, pitch, color) {
 
     this.returnAllFieldPlayersToHome = function() {
         for (var i = 0; i < this.players.length; i++) {
-            this.players[i].stateMachine.changeState(new PlayerStateReturnToHomeRegion());
+            if (this.players[i].isGoalkeeper) {
+                this.players[i].stateMachine.changeState(new GoalkeeperStateReturnHome());
+            } else {
+                this.players[i].stateMachine.changeState(new PlayerStateReturnToHomeRegion());
+            }
         }
     };
 

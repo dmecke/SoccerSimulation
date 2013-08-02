@@ -21,6 +21,8 @@ function Param() {
     this.MaxShootingForce = 30;
     this.MaxPassingForce = 3;
 
+    this.GoalKeeperInterceptRange = 100;
+
     this.BallWithinReceivingRange = 10;
 }
 

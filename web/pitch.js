@@ -1,5 +1,6 @@
 var jquery = require('jquery');
 var Vector2d = require('./vector2d');
+var Ball = require('./ball');
 var Goal = require('./goal');
 var TeamStatePrepareForKickOff = require('./teamStatePrepareForKickOff');
 var Param = require('./param');
@@ -7,7 +8,7 @@ var Region = require('./region');
 
 function Pitch() {
     this.teams = [];
-    this.ball = null;
+    this.ball = new Ball();
     this.regions = [];
     this.playingArea = new Region(20, 20, new Param().WindowWidth - 20, new Param().WindowHeight - 20);
     this.redGoal = new Goal(new Vector2d(this.playingArea.left, (new Param().WindowHeight - new Param().GoalWidth) / 2), new Vector2d(this.playingArea.left, new Param().WindowHeight - (new Param().WindowHeight - new Param().GoalWidth) / 2), new Vector2d(1, 0));

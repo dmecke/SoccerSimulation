@@ -1,19 +1,14 @@
 var PlayerStateMachine = require('./playerStateMachine');
-var MovingEntity = require('./movingEntity');
+var BasePlayer = require('./basePlayer');
 var Vector2d = require('./vector2d');
 var Param = require('./param');
 var util = require('util');
 
 function Player(id, team) {
-    MovingEntity.call(this, new Param().PlayerMaxForce, new Param().PlayerMaxSpeedWithoutBall, new Param().PlayerMass);
-
-    this.id = id;
-    this.color = team.color;
-    this.team = team;
+    BasePlayer.call(this, id, team);
     this.neighbours = [];
     this.stateMachine = new PlayerStateMachine(this);
-    this.homeRegion = null;
-    this.position = new Vector2d((this.team.pitch.playingArea.right - this.team.pitch.playingArea.left) / 2, this.team.pitch.playingArea.bottom);
+    this.isGoalkeeper = false;
 
     this.update = function() {
         this.tagNeighbours();
@@ -37,18 +32,6 @@ function Player(id, team) {
         return this.team.playerClosestToBall.equals(this);
     };
 
-    this.isControllingPlayer = function() {
-        return this.team.controllingPlayer && this.team.controllingPlayer.equals(this);
-    };
-
-    this.inHomeRegion = function() {
-        return this.homeRegion.center.distanceSq(this.position) < new Param().PlayerKickingDistance * new Param().PlayerKickingDistance;
-    };
-
-    this.ballWithinReceivingRange = function() {
-        return this.position.distanceSq(this.team.pitch.ball.position) < new Param().BallWithinReceivingRange * new Param().BallWithinReceivingRange;
-    };
-
     this.ballWithinKickingRange = function() {
         return this.position.distanceSq(this.team.pitch.ball.position) < 100;
     };
@@ -56,29 +39,7 @@ function Player(id, team) {
     this.isThreatened = function() {
         return false; // todo
     };
-
-    this.trackBall = function() {
-        var toTarget = this.team.pitch.ball.position.clone();
-        toTarget.subtract(this.position);
-        toTarget.normalize();
-        this.heading = toTarget;
-    };
-
-    this.equals = function(player) {
-        return this.id == player.id && this.team.equals(player.team);
-    };
-
-    this.toJSON = function() {
-        return {
-            'id': this.id,
-            'color': this.color,
-            'position': this.position,
-            'heading': this.heading,
-            'currentTarget': this.steeringBehaviours.currentTarget,
-            'state': this.stateMachine.currentState.name
-        }
-    };
 }
-util.inherits(Player, MovingEntity);
+util.inherits(Player, BasePlayer);
 
 module.exports = Player;
