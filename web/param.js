@@ -18,7 +18,7 @@ function Param() {
 
     this.PlayerKickingAccuracy = 0.99;
 
-    this.MaxShootingForce = 30;
+    this.MaxShootingForce = 6;
     this.MaxPassingForce = 3;
 
     this.GoalKeeperInterceptRange = 100;
