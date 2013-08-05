@@ -13,7 +13,7 @@ function BasePlayer(id, team) {
     this.homeRegion = null;
 
     this.inHomeRegion = function() {
-        return this.homeRegion.center.distanceSq(this.position) < new Param().PlayerKickingDistance * new Param().PlayerKickingDistance;
+        return this.homeRegion.isInside(this.position);
     };
 
     this.equals = function(player) {

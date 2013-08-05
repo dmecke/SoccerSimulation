@@ -9,6 +9,10 @@ function Region(left, top, right, bottom) {
     this.width = Math.abs(right - left);
     this.height = Math.abs(bottom - top);
 
+    this.isInside = function(position) {
+        return position.x > this.left && position.x < this.right && position.y > this.top && position.y < this.bottom;
+    };
+
     this.toJSON = function() {
         return {
             'left': this.left,
