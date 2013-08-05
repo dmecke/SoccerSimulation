@@ -54,7 +54,7 @@ function PlayerStateKickBall() {
         var passingPower = dot * new Param().MaxPassingForce; // direction of the player to the ball * maxPassingForce
 
         var passingBallTarget = new Vector2d(0, 0);
-        if (player.isThreatened() && player.team.canPass(player, receiver, passingBallTarget, passingPower, 100)) { // last parameter is the minimum pass distance
+        if (player.isThreatened() && player.team.findPass(player, receiver, passingBallTarget, passingPower, 100)) { // last parameter is the minimum pass distance
             passingBallTarget = player.team.pitch.ball.addNoiseToKick(player.team.pitch.ball.position, passingBallTarget);
 
             var passingKickDirection = passingBallTarget.clone();

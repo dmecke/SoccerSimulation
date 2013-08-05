@@ -134,8 +134,93 @@ function Team(id, pitch, color) {
         return false;
     };
 
-    this.canPass = function(passer, receiver, passTarget, power, minimumPassingDistance) {
-        return false; // todo
+    this.findPass = function(passer, receiver, passTarget, power, minPassingDistance) {
+        var closestToGoalSoFar = 1000000000000;
+        var target = new Vector2d(0, 0);
+        var passerPosition = passer.position.clone();
+        var that = this;
+
+        var finded = false;
+        //iterate through all this player's team members and calculate which
+        //one is in a position to be passed the ball
+        jquery.each(this.players, function(index, curPlyr) {
+            var currentPlayerPosition = curPlyr.position.clone();
+            //make sure the potential receiver being examined is not this player
+            //and that it is further away than the minimum pass distance
+            if ((!curPlyr.equals(passer)) && (passerPosition.distanceSq(currentPlayerPosition) > minPassingDistance * minPassingDistance)) {
+                if (that.getBestPassToReceiver(passer, curPlyr, target, power)) {
+                    //if the pass target is the closest to the opponent's goal line found
+                    // so far, keep a record of it
+                    var Dist2Goal = Math.abs(target.x - that.getOpponent().getHomeGoal().center.x);
+
+                    if (Dist2Goal < closestToGoalSoFar) {
+                        closestToGoalSoFar = Dist2Goal;
+
+                        //keep a record of this player
+                        receiver = curPlyr;
+
+                        //and the target
+                        passTarget = target;
+
+                        finded = true;
+                    }
+                }
+            }
+        });
+
+        return finded;
+    };
+
+    this.getBestPassToReceiver = function(passer, receiver, passTarget, power) {
+        //first, calculate how much time it will take for the ball to reach
+        //this receiver, if the receiver was to remain motionless
+        var time = this.pitch.ball.timeToCoverDistance(this.pitch.ball.position, receiver.position, power);
+
+        //return false if ball cannot reach the receiver after having been
+        //kicked with the given power
+        if (time < 0) {
+            return false;
+        }
+
+        //the maximum distance the receiver can cover in this time
+        var interceptRange = time * receiver.maxSpeed;
+
+        //Scale the intercept range
+        var scalingFactor = 0.3;
+        interceptRange *= scalingFactor;
+
+        //now calculate the pass targets which are positioned at the intercepts
+        //of the tangents from the ball to the receiver's range circle.
+        var ip1 = new Vector2d(0, 0);
+        var ip2 = new Vector2d(0, 0);
+
+        var Helper = require('./helper');
+        new Helper.getTangentPoints(receiver.position, interceptRange, this.pitch.ball.position, ip1, ip2);
+
+        var passes = new Array(ip1, receiver.position, ip2);
+        var NumPassesToTry = passes.length;
+
+        // this pass is the best found so far if it is:
+        //
+        //  1. Further upfield than the closest valid pass for this receiver
+        //     found so far
+        //  2. Within the playing area
+        //  3. Cannot be intercepted by any opponents
+
+        var closestSoFar = 100000000000;
+        var bResult = false;
+
+        for (var pass = 0; pass < NumPassesToTry; ++pass) {
+            var dist = Math.abs(passes[pass].x - this.getOpponent().getHomeGoal().center.x);
+
+            if ((dist < closestSoFar) && this.pitch.playingArea.isInside(passes[pass]) && this.isPassSafeFromAllOpponents(this.pitch.ball.position, passes[pass], receiver, power)) {
+                closestSoFar = dist;
+                passTarget = passes[pass];
+                bResult = true;
+            }
+        }
+
+        return bResult;
     };
 
     this.isPassSafeFromAllOpponents = function(from, target, receiver, passingForce) {

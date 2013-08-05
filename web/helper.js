@@ -35,6 +35,27 @@ function Helper() {
         transformationMatrix.transformVector2Ds(transPoint);
 
         return transPoint;
+    };
+
+    this.getTangentPoints = function(c, r, p, t1, t2) {
+        var localP = p.clone();
+        var pmC = localP.subtract(c);
+        var sqrLen = pmC.lengthSq();
+        var rSqr = r * r;
+        if (sqrLen <= rSqr) {
+            // P is inside or on the circle
+            return false;
+        }
+
+        var invSqrLen = 1 / sqrLen;
+        var root = Math.sqrt(Math.abs(sqrLen - rSqr));
+
+        t1.x = c.x + r * (r * pmC.x - pmC.y * root) * invSqrLen;
+        t1.y = c.y + r * (r * pmC.y + pmC.x * root) * invSqrLen;
+        t2.x = c.x + r * (r * pmC.x + pmC.y * root) * invSqrLen;
+        t2.y = c.y + r * (r * pmC.y - pmC.x * root) * invSqrLen;
+
+        return true;
     }
 }
 module.exports = Helper;
