@@ -1,3 +1,4 @@
+var jquery = require('jquery');
 var Vector2d = require('./vector2d');
 var Player = require('./player');
 var Goalkeeper = require('./goalkeeper');
@@ -124,9 +125,9 @@ function Team(id, pitch, color) {
             var time = this.pitch.ball.timeToCoverDistance(ballPosition, shotTarget, power);
 
             if (time > 0) {
-//                if (isPassSafeFromAllOpponents(ballPosition, shotTarget, null, power)) { todo
+                if (this.isPassSafeFromAllOpponents(ballPosition, shotTarget, null, power)) {
                     return shotTarget;
-//                }
+                }
             }
         }
 
@@ -135,6 +136,56 @@ function Team(id, pitch, color) {
 
     this.canPass = function(passer, receiver, passTarget, power, minimumPassingDistance) {
         return false; // todo
+    };
+
+    this.isPassSafeFromAllOpponents = function(from, target, receiver, passingForce) {
+        var that = this;
+        jquery.each(this.getOpponent().players, function(index, player) {
+            if (!that.isPassSafeFromOpponent(from, target, receiver, player, passingForce)) {
+                return false;
+            }
+        });
+        return true;
+    };
+
+    this.isPassSafeFromOpponent = function(from, target, receiver, opponent, passingForce) {
+        //move the opponent into local space.
+        var localTarget = target.clone();
+        var toTarget = localTarget.subtract(from);
+        var toTargetNormalized = toTarget.normalize();
+        var opponentPosition = opponent.position.clone();
+
+        var Helper = require('./helper');
+        var localPositionOpponent = new Helper().pointToLocalSpace(opponentPosition, toTargetNormalized, toTargetNormalized.perp(), from);
+
+        //if opponent is behind the kicker then pass is considered okay(this is
+        //based on the assumption that the ball is going to be kicked with a
+        //velocity greater than the opponent's max velocity)
+        if (localPositionOpponent.x < 0) {
+            return true;
+        }
+
+        //if the opponent is further away than the target we need to consider if
+        //the opponent can reach the position before the receiver.
+        if (from.distanceSq(target) < opponentPosition.distanceSq(from)) {
+            if (receiver != null) {
+                return localTarget.distanceSq(opponentPosition) > localTarget.distanceSq(receiver.position);
+            } else {
+                return true;
+            }
+        }
+
+        //calculate how long it takes the ball to cover the distance to the
+        //position orthogonal to the opponents position
+        var timeForBall = this.pitch.ball.timeToCoverDistance(new Vector2d(0, 0), new Vector2d(localPositionOpponent.x, 0), passingForce);
+
+        //now calculate how far the opponent can run in this time
+        var reach = opponent.maxSpeed * timeForBall + pitch.ball.radius;
+
+        //if the distance to the opponent's y position is less than his running
+        //range plus the radius of the ball and the opponents radius then the
+        //ball can be intercepted
+        return !Math.abs(localPositionOpponent.y) < reach;
     };
 
     this.equals = function(team) {
