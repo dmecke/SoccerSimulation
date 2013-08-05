@@ -15,6 +15,9 @@ function TeamStateMachine(team) {
         this.currentState.exit(this.entity);
         this.currentState = newState;
         this.currentState.enter(this.entity);
+        if (this.entity.pitch.stopOnStateChange) {
+            clearInterval(this.entity.pitch.updateInterval);
+        }
     };
 
     this.toJSON = function() {

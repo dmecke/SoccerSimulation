@@ -35,15 +35,19 @@ io.sockets.on('connection', function(socket) {
     socket.on('requestRegions', function() {
         io.sockets.emit('renderPlayingArea', pitch.playingArea, pitch.regions);
     });
+    socket.on('stopOnStateChange', function(stop) {
+        pitch.stopOnStateChange = stop;
+    });
+    socket.on('continue', function() {
+        startInterval(fps);
+    });
 });
 
 function startInterval(fps) {
-    var updateInterval = setInterval(function() {
+    pitch.updateInterval = setInterval(function() {
 //        console.log('tick (' + io.sockets.clients().length + ' clients connected)');
         pitch.update();
         io.sockets.emit('render', pitch);
     }, Math.round(1000 / fps));
-
-    return updateInterval;
 }
-var updateInterval = startInterval(fps);
+startInterval(fps);
