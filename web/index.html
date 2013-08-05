@@ -48,6 +48,15 @@ function toggleShowRegions() {
 }
 
 var io = io.connect('http://nodejs.playground.cunningsoft.de:8000');
+
+var playingArea = null;
+var regions = null;
+io.on('renderPlayingArea', function(pa, r) {
+    playingArea = pa;
+    regions = r;
+});
+io.emit('requestRegions');
+
 io.on('render', function(pitch) {
     if (outputConsole) {
         console.log(pitch);
@@ -75,8 +84,8 @@ io.on('render', function(pitch) {
     context.fillRect(0, 0, WindowWidth, WindowHeight);
 
     //draw regions
-    if (showRegions) {
-        $.each(pitch.regions, function(regionIndex, region) {
+    if (showRegions && regions) {
+        $.each(regions, function(regionIndex, region) {
             context.beginPath();
             context.strokeStyle = 'rgba(255, 255, 255, 1)';
             context.rect(region.left, region.top, region.width, region.height);
@@ -87,20 +96,22 @@ io.on('render', function(pitch) {
     }
 
     // draw field lines
-    context.beginPath();
-    context.strokeStyle = 'rgba(255, 255, 255, 1)';
-    context.rect(pitch.playingArea.left, pitch.playingArea.top, pitch.playingArea.width, pitch.playingArea.height);
-    context.moveTo(pitch.playingArea.center.x, pitch.playingArea.top);
-    context.lineTo(pitch.playingArea.center.x, pitch.playingArea.bottom);
-    context.stroke();
-    context.beginPath();
-    context.arc(pitch.playingArea.center.x, pitch.playingArea.center.y, pitch.playingArea.width * 0.125, 0, 2 * Math.PI);
-    context.stroke();
-    context.beginPath();
-    context.arc(pitch.playingArea.center.x, pitch.playingArea.center.y, 2, 0, 2 * Math.PI);
-    context.fillStyle = 'rgba(255, 255, 255, 1)';
-    context.fill();
-    context.stroke();
+    if (playingArea) {
+        context.beginPath();
+        context.strokeStyle = 'rgba(255, 255, 255, 1)';
+        context.rect(playingArea.left, playingArea.top, playingArea.width, playingArea.height);
+        context.moveTo(playingArea.center.x, playingArea.top);
+        context.lineTo(playingArea.center.x, playingArea.bottom);
+        context.stroke();
+        context.beginPath();
+        context.arc(playingArea.center.x, playingArea.center.y, playingArea.width * 0.125, 0, 2 * Math.PI);
+        context.stroke();
+        context.beginPath();
+        context.arc(playingArea.center.x, playingArea.center.y, 2, 0, 2 * Math.PI);
+        context.fillStyle = 'rgba(255, 255, 255, 1)';
+        context.fill();
+        context.stroke();
+    }
 
     // draw ball
     context.beginPath();
@@ -109,16 +120,20 @@ io.on('render', function(pitch) {
     context.fill();
 
     // draw red goal
-    context.beginPath();
-    context.strokeStyle = 'rgba(255, 0, 0, 1)';
-    context.rect(pitch.playingArea.left, (WindowHeight - GoalWidth) / 2, 40, GoalWidth);
-    context.stroke();
+    if (playingArea) {
+        context.beginPath();
+        context.strokeStyle = 'rgba(255, 0, 0, 1)';
+        context.rect(playingArea.left, (WindowHeight - GoalWidth) / 2, 40, GoalWidth);
+        context.stroke();
+    }
 
     // draw blue goal
-    context.beginPath();
-    context.strokeStyle = 'rgba(0, 0, 255, 1)';
-    context.rect(pitch.playingArea.right - 40, (WindowHeight - GoalWidth) / 2, 40, GoalWidth);
-    context.stroke();
+    if (playingArea) {
+        context.beginPath();
+        context.strokeStyle = 'rgba(0, 0, 255, 1)';
+        context.rect(playingArea.right - 40, (WindowHeight - GoalWidth) / 2, 40, GoalWidth);
+        context.stroke();
+    }
 
     // draw score
     context.beginPath();

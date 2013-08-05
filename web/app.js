@@ -32,6 +32,9 @@ io.sockets.on('connection', function(socket) {
         clearInterval(updateInterval);
         updateInterval = startInterval(fps);
     });
+    socket.on('requestRegions', function() {
+        io.sockets.emit('renderPlayingArea', pitch.playingArea, pitch.regions);
+    });
 });
 
 function startInterval(fps) {

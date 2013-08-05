@@ -56,12 +56,10 @@ function Pitch() {
 
     this.toJSON = function() {
         return {
-            'playingArea': this.playingArea,
             'teams': this.teams,
             'ball': this.ball,
             'redGoal': this.redGoal,
-            'blueGoal': this.blueGoal,
-            'regions': this.regions
+            'blueGoal': this.blueGoal
         }
     };
 }
