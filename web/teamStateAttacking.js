@@ -1,5 +1,3 @@
-var TeamStateDefending = require('./teamStateDefending');
-
 function TeamStateAttacking() {
     this.name = 'Attacking';
 
@@ -21,8 +19,9 @@ function TeamStateAttacking() {
     };
 
     this.execute = function(team) {
-        if (!team.inControl) {
-            team.changeState(new TeamStateDefending());
+        if (!team.inControl()) {
+            var TeamStateDefending = require('./teamStateDefending');
+            team.stateMachine.changeState(new TeamStateDefending());
 
             return;
         }

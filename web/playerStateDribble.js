@@ -5,6 +5,7 @@ function PlayerStateDribble() {
 
     this.enter = function(player) {
         player.team.controllingPlayer = player;
+        player.team.getOpponent().controllingPlayer = null;
     };
 
     this.exit = function() {

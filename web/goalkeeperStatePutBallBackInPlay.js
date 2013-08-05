@@ -5,6 +5,7 @@ function GoalkeeperStatePutBallBackInPlay() {
 
     this.enter = function(goalkeeper) {
         goalkeeper.team.controllingPlayer = goalkeeper;
+        goalkeeper.team.getOpponent().controllingPlayer = null;
 
         goalkeeper.team.getOpponent().returnAllFieldPlayersToHome();
         goalkeeper.team.returnAllFieldPlayersToHome();

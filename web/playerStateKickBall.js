@@ -7,6 +7,7 @@ function PlayerStateKickBall() {
     this.enter = function(player) {
         var PlayerStateChase = require('./playerStateChase');
         player.team.controllingPlayer = player;
+        player.team.getOpponent().controllingPlayer = null;
 
 //        if (!player.isReadyForNextKick()) { todo
 //            player.stateMachine.changeState(new PlayerStateChase());
