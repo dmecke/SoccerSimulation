@@ -7,7 +7,6 @@ function Ball() {
     MovingEntity.call(this, 0, -1, new Param().BallMass);
     this.radius = new Param().BallSize;
     this.friction = new Param().Friction;
-    this.playerKickingAccuracy = new Param().PlayerKickingAccuracy; // range from 0 to 1 - the lower the worse the players get
 
     this.update = function() {
         this.steeringBehaviours.update();
@@ -62,6 +61,19 @@ function Ball() {
 
         var ballPosition = this.position.clone();
         return ballPosition.add(ut).add(scalarToVector);
+    };
+
+    this.addNoiseToKick = function(ballPosition, ballTarget) {
+
+        var displacement = (Math.PI - Math.PI * new Param().PlayerKickingAccuracy) * (Math.random() * 2 - 1);
+
+        var target = ballTarget.clone();
+        var toTarget = target.subtract(ballPosition);
+
+        var Helper = require('./helper');
+        new Helper().vec2dRotateAroundOrigin(toTarget, displacement);
+
+        return toTarget.add(ballPosition);
     };
 
     this.toJSON = function() {

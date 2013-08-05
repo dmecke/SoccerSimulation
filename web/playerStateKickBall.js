@@ -36,7 +36,7 @@ function PlayerStateKickBall() {
 
         var shootingBallTarget = player.team.canShoot(player.team.pitch.ball.position, shootingPower);
         if (shootingBallTarget != false) {
-//            shootingBallTarget = this.addNoiseToKick(player.team.pitch.ball.position, shootingBallTarget); todo
+            shootingBallTarget = player.team.pitch.ball.addNoiseToKick(player.team.pitch.ball.position, shootingBallTarget);
 
             var shootingKickDirection = shootingBallTarget.clone();
             shootingKickDirection.subtract(player.team.pitch.ball.position);
@@ -55,7 +55,7 @@ function PlayerStateKickBall() {
 
         var passingBallTarget = new Vector2d(0, 0);
         if (player.isThreatened() && player.team.canPass(player, receiver, passingBallTarget, passingPower, 100)) { // last parameter is the minimum pass distance
-//            passingBallTarget = this.addNoiseToKick(player.team.pitch.ball.position, passingBallTarget); todo
+            passingBallTarget = player.team.pitch.ball.addNoiseToKick(player.team.pitch.ball.position, passingBallTarget);
 
             var passingKickDirection = passingBallTarget.clone();
             passingKickDirection.subtract(player.team.pitch.ball.position);

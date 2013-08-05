@@ -1,4 +1,4 @@
-var Util = require('./util');
+var Helper = require('./helper');
 
 function PlayerStateDribble() {
     this.name = 'Dribble';
@@ -20,8 +20,8 @@ function PlayerStateDribble() {
             var direction = player.heading;
             var angle = Math.PI / 4 * -1 * player.team.getHomeGoal().facing.sign(player.heading);
 
-            var util = new Util();
-            util.vec2dRotateAroundOrigin(direction, angle);
+            var helper = new Helper();
+            helper.vec2dRotateAroundOrigin(direction, angle);
 
             var kickingForce = 8;
 
