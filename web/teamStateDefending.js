@@ -14,7 +14,7 @@ function TeamStateDefending() {
 
         // if a player is in state "Wait" or "ReturnToHomeRegion, its
         // steering target must be updated to its new home region
-//        team.updateTargetsOfWaitingPlayers(); todo
+        team.updateTargetsOfWaitingPlayers();
     };
 
     this.exit = function(team) {

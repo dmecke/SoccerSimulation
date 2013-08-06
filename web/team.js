@@ -273,6 +273,16 @@ function Team(id, pitch, color) {
         return !Math.abs(localPositionOpponent.y) < reach;
     };
 
+    this.updateTargetsOfWaitingPlayers = function() {
+        jquery.each(this.players, function(index, player) {
+            if (!player.isGoalkeeper) {
+                if (player.stateMachine.currentState.name == 'Wait' || player.stateMachine.currentState.name == 'ReturnToHomeRegion') {
+                    player.steeringBehaviours.currentTarget = player.homeRegion.center;
+                }
+            }
+        });
+    };
+
     this.equals = function(team) {
         return this.id == team.id;
     };
