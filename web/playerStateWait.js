@@ -24,10 +24,12 @@ function PlayerStateWait() {
 
             player.trackBall();
 
-            if (player.team.inControl &&
-                !player.isControllingPlayer) {
-//                player.isAheadOfAttacker) { todo
-//                player.team.requestPass(player); todo
+            if (player.team.inControl()) {
+                if (!player.isControllingPlayer()) {
+                    if (player.isAheadOfAttacker()) {
+        //                player.team.requestPass(player); todo
+                    }
+                }
             }
 
             if (player.team.pitch.gameOn) {

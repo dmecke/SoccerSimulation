@@ -35,6 +35,10 @@ function Player(id, team) {
     this.isThreatened = function() {
         return false; // todo
     };
+
+    this.isAheadOfAttacker = function() {
+        return Math.abs(this.position.x - this.team.getGoal().center.x) < Math.abs(this.team.controllingPlayer.position.x - this.team.getGoal().center.x);
+    };
 }
 util.inherits(Player, BasePlayer);
 
