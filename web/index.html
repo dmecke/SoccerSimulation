@@ -6,6 +6,7 @@
         <script type="text/javascript" src="http://nodejs.playground.cunningsoft.de:8000/socket.io/socket.io.js"></script>
         <script type="text/javascript">
 var io = io.connect('http://nodejs.playground.cunningsoft.de:8000');
+var isPaused = false;
 
 var WindowWidth = 700;
 var WindowHeight = 400;
@@ -15,6 +16,7 @@ var outputConsole = false;
 var showState = true;
 var showCurrentTarget = true;
 var showRegions = false;
+var showHomeRegion = false;
 var stopOnStateChange = false;
 function toggleOutputConsole() {
     outputConsole = !outputConsole;
@@ -48,6 +50,14 @@ function toggleShowRegions() {
         $('#showRegionsButton').html('show regions');
     }
 }
+function toggleShowHomeRegion() {
+    showHomeRegion = !showHomeRegion;
+    if (showHomeRegion) {
+        $('#showHomeRegionButton').html('hide home region');
+    } else {
+        $('#showHomeRegionButton').html('show home region');
+    }
+}
 function toggleStopOnStateChange() {
     stopOnStateChange = !stopOnStateChange;
     if (stopOnStateChange) {
@@ -57,6 +67,15 @@ function toggleStopOnStateChange() {
     }
     io.emit('stopOnStateChange', stopOnStateChange);
 }
+function togglePause() {
+    if (isPaused) {
+        io.emit('continue');
+        $('#pauseButton').html('pause');
+    } else {
+        io.emit('pause');
+        $('#pauseButton').html('continue');
+    }
+}
 
 var playingArea = null;
 var regions = null;
@@ -65,6 +84,10 @@ io.on('renderPlayingArea', function(pa, r) {
     regions = r;
 });
 io.emit('requestRegions');
+
+io.on('isPaused', function(p) {
+    isPaused = p;
+});
 
 io.on('render', function(pitch) {
     if (outputConsole) {
@@ -174,6 +197,13 @@ io.on('render', function(pitch) {
             if (showCurrentTarget) {
                 context.fillRect(player.currentTarget.x - 2, player.currentTarget.y - 2, 4, 4);
             }
+            if (showHomeRegion) {
+                context.beginPath();
+                context.strokeStyle = player.color;
+                context.moveTo(player.position.x, player.position.y);
+                context.lineTo(player.homeRegion.center.x, player.homeRegion.center.y);
+                context.stroke();
+            }
 
             context.font = '12px Verdana'
             context.strokeStyle = '#00aa00';
@@ -245,6 +275,7 @@ io.on('render', function(pitch) {
             <li><button id="showStateButton" onclick="toggleShowState()">hide state</button></li>
             <li><button id="showCurrentTargetButton" onclick="toggleShowCurrentTarget()">hide current target</button></li>
             <li><button id="showRegionsButton" onclick="toggleShowRegions()">show regions</button></li>
+            <li><button id="showHomeRegionButton" onclick="toggleShowHomeRegion()">show home region</button></li>
             <li>
                 <button onclick="io.emit('setFps', 60); $('#fps').html(60);">60 FPS</button>
                 <button onclick="io.emit('setFps', 30); $('#fps').html(30);">30 FPS</button>
@@ -253,7 +284,7 @@ io.on('render', function(pitch) {
                 <div>currently: <span id="fps">60</span>FPS</div>
             </li>
             <li><button id="stopOnStateChangesButton" onclick="toggleStopOnStateChange()">stop on state changes</button></li>
-            <li><button onclick="io.emit('continue');">continue</button></li>
+            <li><button onclick="togglePause()" id="pauseButton">pause</button></li>
         </ul>
     </body>
 </html>

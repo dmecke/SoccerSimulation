@@ -40,6 +40,11 @@ io.sockets.on('connection', function(socket) {
     });
     socket.on('continue', function() {
         startInterval(fps);
+        io.sockets.emit('isPaused', false);
+    });
+    socket.on('pause', function() {
+        clearInterval(pitch.updateInterval);
+        io.sockets.emit('isPaused', true);
     });
 });
 

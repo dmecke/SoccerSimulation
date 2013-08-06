@@ -27,7 +27,8 @@ function BasePlayer(id, team) {
             'position': this.position,
             'heading': this.heading,
             'currentTarget': this.steeringBehaviours.currentTarget,
-            'state': this.stateMachine.currentState.name
+            'state': this.stateMachine.currentState.name,
+            'homeRegion': this.homeRegion
         }
     };
 
