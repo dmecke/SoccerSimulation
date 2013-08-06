@@ -28,9 +28,10 @@ io.sockets.on('connection', function(socket) {
     socket.on('disconnect', function() {
         console.log('socket ' + socket.id + ' disconnected');
     });
-    socket.on('setFps', function(fps) {
-        clearInterval(updateInterval);
-        updateInterval = startInterval(fps);
+    socket.on('setFps', function(framesPerSecond) {
+        clearInterval(pitch.updateInterval);
+        startInterval(framesPerSecond);
+        fps = framesPerSecond;
     });
     socket.on('requestRegions', function() {
         io.sockets.emit('renderPlayingArea', pitch.playingArea, pitch.regions);
