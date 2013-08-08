@@ -24,6 +24,10 @@ function GoalkeeperStateInterceptBall() {
             return;
         }
     };
+
+    this.onMessage = function() {
+        return false;
+    };
 }
 
 module.exports = GoalkeeperStateInterceptBall;

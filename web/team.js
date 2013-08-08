@@ -1,11 +1,15 @@
 var jquery = require('jquery');
 var Vector2d = require('./vector2d');
+var Param = require('./param');
 var Player = require('./player');
 var Goalkeeper = require('./goalkeeper');
 var TeamStateMachine = require('./teamStateMachine');
 var GoalkeeperStateReturnHome = require('./goalkeeperStateReturnHome');
 var PlayerStateWait = require('./playerStateWait');
 var PlayerStateReturnToHomeRegion = require('./playerStateReturnToHomeRegion');
+var MessageDispatcher = require('./messageDispatcher');
+var MessageTypes = require('./messageTypes');
+var Helper = require('./helper');
 
 function Team(id, pitch, color) {
     this.id = id;
@@ -38,6 +42,12 @@ function Team(id, pitch, color) {
     this.receivingPlayer = null;
     this.controllingPlayer = null;
     this.supportingPlayer = null;
+
+    if (this.id == 1) {
+        this.name = 'Red';
+    } else {
+        this.name = 'Blue';
+    }
 
     this.update = function() {
         for (var i = 0; i < this.players.length; i++) {
@@ -136,11 +146,11 @@ function Team(id, pitch, color) {
 
     this.findPass = function(passer, receiver, passTarget, power, minPassingDistance) {
         var closestToGoalSoFar = 1000000000000;
-        var target = new Vector2d(0, 0);
         var passerPosition = passer.position.clone();
         var that = this;
 
         var finded = false;
+        var target = new Vector2d(0, 0);
         //iterate through all this player's team members and calculate which
         //one is in a position to be passed the ball
         jquery.each(this.players, function(index, curPlyr) {
@@ -148,7 +158,8 @@ function Team(id, pitch, color) {
             //make sure the potential receiver being examined is not this player
             //and that it is further away than the minimum pass distance
             if ((!curPlyr.equals(passer)) && (passerPosition.distanceSq(currentPlayerPosition) > minPassingDistance * minPassingDistance)) {
-                if (that.getBestPassToReceiver(passer, curPlyr, target, power)) {
+                var bestPass = that.getBestPassToReceiver(passer, curPlyr, target, power);
+                if (bestPass) {
                     //if the pass target is the closest to the opponent's goal line found
                     // so far, keep a record of it
                     var Dist2Goal = Math.abs(target.x - that.getOpponent().getHomeGoal().center.x);
@@ -160,14 +171,13 @@ function Team(id, pitch, color) {
                         receiver = curPlyr;
 
                         //and the target
-                        passTarget = target;
+                        passTarget = bestPass;
 
                         finded = true;
                     }
                 }
             }
         });
-
         return finded;
     };
 
@@ -194,8 +204,7 @@ function Team(id, pitch, color) {
         var ip1 = new Vector2d(0, 0);
         var ip2 = new Vector2d(0, 0);
 
-        var Helper = require('./helper');
-        new Helper.getTangentPoints(receiver.position, interceptRange, this.pitch.ball.position, ip1, ip2);
+        this.getTangentPoints(receiver.position, interceptRange, this.pitch.ball.position, ip1, ip2);
 
         var passes = new Array(ip1, receiver.position, ip2);
         var NumPassesToTry = passes.length;
@@ -219,8 +228,11 @@ function Team(id, pitch, color) {
                 bResult = true;
             }
         }
-
-        return bResult;
+        if (bResult) {
+            return passTarget;
+        } else {
+            return false;
+        }
     };
 
     this.isPassSafeFromAllOpponents = function(from, target, receiver, passingForce) {
@@ -283,6 +295,29 @@ function Team(id, pitch, color) {
         });
     };
 
+    this.requestPass = function(requester) {
+        if (this.isPassSafeFromAllOpponents(this.controllingPlayer.position, requester.position, requester, new Param().MaxPassingForce)) {
+
+            //tell the player to make the pass
+            //let the receiver know a pass is coming
+            var dispatcher = new MessageDispatcher();
+            var messageTypes = new MessageTypes();
+            dispatcher.dispatchMessage(0, requester, this.controllingPlayer, messageTypes.passToMe, requester);
+        }
+    };
+
+    /**
+     * returns true if an opposing player is within the radius of the position given as a par ameter
+     */
+    this.isOpponentWithinRadius = function(position, radius) {
+        jquery.each(this.getOpponent().players, function(index, player) {
+            if (position.distanceSq(player.position) < radius * radius) {
+                return true;
+            }
+        });
+        return false;
+    };
+
     this.equals = function(team) {
         return this.id == team.id;
     };
@@ -290,9 +325,31 @@ function Team(id, pitch, color) {
     this.toJSON = function() {
         return {
             'players' : this.players,
+            'controllingPlayer': this.controllingPlayer,
             'state': this.stateMachine.currentState.name
         }
     };
+
+    this.getTangentPoints = function(c, r, p, t1, t2) {
+        var localP = p.clone();
+        var pmC = localP.subtract(c);
+        var sqrLen = pmC.lengthSq();
+        var rSqr = r * r;
+        if (sqrLen <= rSqr) {
+            // P is inside or on the circle
+            return false;
+        }
+
+        var invSqrLen = 1 / sqrLen;
+        var root = Math.sqrt(Math.abs(sqrLen - rSqr));
+
+        t1.x = c.x + r * (r * pmC.x - pmC.y * root) * invSqrLen;
+        t1.y = c.y + r * (r * pmC.y + pmC.x * root) * invSqrLen;
+        t2.x = c.x + r * (r * pmC.x + pmC.y * root) * invSqrLen;
+        t2.y = c.y + r * (r * pmC.y - pmC.x * root) * invSqrLen;
+
+        return true;
+    }
 }
 
 module.exports = Team;

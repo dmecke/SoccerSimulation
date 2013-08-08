@@ -33,6 +33,10 @@ function PlayerStateChase() {
         // player is not the closest to ball - move back to home region
         player.stateMachine.changeState(new PlayerStateReturnToHomeRegion());
     };
+
+    this.onMessage = function() {
+        return false;
+    };
 }
 
 module.exports = PlayerStateChase;

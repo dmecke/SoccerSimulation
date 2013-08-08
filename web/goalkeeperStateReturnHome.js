@@ -17,6 +17,10 @@ function GoalkeeperStateReturnHome() {
             goalkeeper.stateMachine.changeState(new GoalkeeperStateTendGoal());
         }
     };
+
+    this.onMessage = function() {
+        return false;
+    };
 }
 
 module.exports = GoalkeeperStateReturnHome;

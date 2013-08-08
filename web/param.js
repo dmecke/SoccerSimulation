@@ -4,9 +4,13 @@ function Param() {
     this.WindowWidth = 700;
     this.WindowHeight = 400;
 
+    this.ChanceOfUsingArriveTypeReceiveBehavior = 0.5;
+
     this.BallSize = 5;
     this.BallMass = 1;
     this.Friction = -0.015;
+
+    this.PlayerInTargetRange = 10;
 
     this.PlayerKickingDistance = 6;
 
@@ -16,10 +20,14 @@ function Param() {
     this.PlayerMaxSpeedWithoutBall = 1.6;
     this.PlayerMaxTurnRate = 0.4;
 
+    this.PlayerComfortZone = 60;
+
     this.PlayerKickingAccuracy = 0.99;
 
     this.MaxShootingForce = 6;
     this.MaxPassingForce = 3;
+
+    this.GoalkeeperMinPassDist = 50;
 
     this.GoalKeeperTendingDistance = 20;
 

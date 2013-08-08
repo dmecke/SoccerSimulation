@@ -17,6 +17,10 @@ function PlayerStateReturnToHomeRegion() {
             player.stateMachine.changeState(new PlayerStateWait());
         }
     };
+
+    this.onMessage = function() {
+        return false;
+    };
 }
 
 module.exports = PlayerStateReturnToHomeRegion;

@@ -9,6 +9,10 @@ function GoalkeeperStateGlobal() {
 
     this.execute = function(goalkeeper) {
     };
+
+    this.onMessage = function() {
+        // @todo
+    };
 }
 
 module.exports = GoalkeeperStateGlobal;

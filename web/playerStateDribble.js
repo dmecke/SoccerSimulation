@@ -32,6 +32,10 @@ function PlayerStateDribble() {
 
         player.stateMachine.changeState(new PlayerStateChase());
     };
+
+    this.onMessage = function() {
+        return false;
+    };
 }
 
 module.exports = PlayerStateDribble;

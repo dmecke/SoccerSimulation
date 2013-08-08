@@ -34,6 +34,10 @@ function GoalkeeperStateTendGoal() {
             return;
         }
     };
+
+    this.onMessage = function() {
+        return false;
+    };
 }
 
 module.exports = GoalkeeperStateTendGoal;

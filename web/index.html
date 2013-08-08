@@ -107,6 +107,15 @@ io.on('render', function(pitch) {
     $('#playerStateBlue4').html(pitch.teams[1].players[3].state);
     $('#playerStateBlue5').html(pitch.teams[1].players[4].state);
 
+    var controllingPlayerRed = pitch.teams[0].controllingPlayer;
+    if (controllingPlayerRed) {
+        $('#playerStateRed' + controllingPlayerRed.id).html($('#playerStateRed' + controllingPlayerRed.id).html() + ' (in control)');
+    }
+    var controllingPlayerBlue = pitch.teams[1].controllingPlayer;
+    if (controllingPlayerBlue) {
+        $('#playerStateBlue' + controllingPlayerBlue.id).html($('#playerStateBlue' + controllingPlayerBlue.id).html() + ' (in control)');
+    }
+
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
 

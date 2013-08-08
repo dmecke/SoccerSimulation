@@ -27,7 +27,7 @@ function PlayerStateWait() {
             if (player.team.inControl()) {
                 if (!player.isControllingPlayer()) {
                     if (player.isAheadOfAttacker()) {
-        //                player.team.requestPass(player); todo
+                        player.team.requestPass(player);
                     }
                 }
             }
@@ -40,6 +40,10 @@ function PlayerStateWait() {
                 }
             }
         }
+    };
+
+    this.onMessage = function() {
+        return false;
     };
 }
 

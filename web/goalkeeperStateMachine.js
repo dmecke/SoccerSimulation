@@ -22,6 +22,18 @@ function GoalkeeperStateMachine(goalkeeper) {
         this.currentState.enter(this.entity);
     };
 
+    this.handleMessage = function(telegram) {
+        if (this.currentState.onMessage(this.entity, telegram)) {
+            return true;
+        }
+
+        if (this.globalState.onMessage(this.entity, telegram)) {
+            return true;
+        }
+
+        return false;
+    };
+
     this.toJSON = function() {
         return {};
     }

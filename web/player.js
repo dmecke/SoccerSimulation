@@ -3,6 +3,7 @@ var BasePlayer = require('./basePlayer');
 var Vector2d = require('./vector2d');
 var Param = require('./param');
 var util = require('util');
+var jquery = require('jquery');
 
 function Player(id, team) {
     BasePlayer.call(this, id, team);
@@ -33,7 +34,17 @@ function Player(id, team) {
     };
 
     this.isThreatened = function() {
-        return false; // todo
+        //check against all opponents to make sure non are within this
+        //player's comfort zone
+        jquery.each(this.team.getOpponent().players, function(index, player) {
+            //calculate distance to the player. if dist is less than our
+            //comfort zone, and the opponent is infront of the player, return true
+            if (this.positionInFrontOfPlayer(player.position) && this.position.distanceSq(player.position) < new Param().PlayerComfortZone * new Param().PlayerComfortZone) {
+                return true;
+            }
+        });
+
+        return false;
     };
 
     this.isAheadOfAttacker = function() {

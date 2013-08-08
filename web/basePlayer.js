@@ -16,6 +16,18 @@ function BasePlayer(id, team) {
         return this.homeRegion.isInside(this.position);
     };
 
+    this.handleMessage = function(telegram) {
+        this.stateMachine.handleMessage(telegram);
+    };
+
+    /**
+     * true if the player is located in the designated 'hot region' -- the area close to the opponent's goal
+     * @todo check if position.y is correct - should this be the direct line instead?
+     */
+    this.inHotRegion = function() {
+        return Math.abs(this.position.y - this.team.getGoal().center.y) < this.team.pitch.playingArea.length / 3;
+    };
+
     this.equals = function(player) {
         return this.id == player.id && this.team.equals(player.team);
     };
@@ -53,7 +65,18 @@ function BasePlayer(id, team) {
 
     this.isClosestPlayerOnPitchToBall = function() {
         return this.isClosestTeamMemberToBall() && this.position.distanceSq(this.team.pitch.ball) < this.team.getOpponent().playerClosestToBall.position.distanceSq(this.team.pitch.ball);
-    }
+    };
+
+    this.atTarget = function() {
+        return this.position.distanceSq(this.steeringBehaviours.currentTarget) < new Param().PlayerInTargetRange * new Param().PlayerInTargetRange;
+    };
+
+    this.positionInFrontOfPlayer = function(position) {
+        var localPosition = position.clone();
+        var toSubject = localPosition.subtract(this.position);
+
+        return toSubject.dot(this.heading) > 0;
+    };
 }
 util.inherits(BasePlayer, MovingEntity);
 

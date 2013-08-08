@@ -75,6 +75,10 @@ function PlayerStateKickBall() {
 
         player.stateMachine.changeState(new PlayerStateDribble());
     };
+
+    this.onMessage = function() {
+        return false;
+    };
 }
 
 module.exports = PlayerStateKickBall;
