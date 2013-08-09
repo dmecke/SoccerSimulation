@@ -20,7 +20,38 @@ function PlayerStateGlobal() {
     };
 
     this.onMessage = function(player, telegram) {
-        if (telegram.message == new MessageTypes().passToMe) {
+        if (telegram.message == new MessageTypes().receiveBall) {
+            player.steeringBehaviours.currentTarget = telegram.additionalInfo;
+
+            var PlayerStateReceiveBall = require('./playerStateReceiveBall');
+            player.stateMachine.changeState(new PlayerStateReceiveBall());
+        } else if (telegram.message == new MessageTypes().supportAttacker) {
+            //if already supporting just return
+            if (player.stateMachine.currentState.name == 'SupportAttacker') {
+                return true;
+            }
+
+            //set the target to be the best supporting position
+//            player.steeringBehaviours.currentTarget = player.team.getSupportSpot(); // @todo
+
+            //change the state
+//            var PlayerStateSupportAttacker = require('./playerStateSupportAttacker'); // @todo
+//            player.stateMachine.changeState(new PlayerStateSupportAttacker()); // @todo
+
+            return true;
+        } else if (telegram.message == new MessageTypes().wait) {
+            //change the state
+            var PlayerStateWait = require('./playerStateWait');
+            player.stateMachine.changeState(new PlayerStateWait());
+
+            return true;
+        } else if (telegram.message == new MessageTypes().goHome) {
+            player.homeRegion = player.defaultHomeRegion;
+            var PlayerStateReturnToHomeRegion = require('./playerStateReturnToHomeRegion');
+            player.stateMachine.changeState(new PlayerStateReturnToHomeRegion());
+
+            return true;
+        } else if (telegram.message == new MessageTypes().passToMe) {
             //get the position of the player requesting the pass
             var receiver = telegram.additionalInfo;
 
@@ -44,17 +75,11 @@ function PlayerStateGlobal() {
             var PlayerStateWait = require('./playerStateWait');
             player.stateMachine.changeState(new PlayerStateWait());
 
-//            player.findSupport(); @todo
+            player.findSupport();
 
             return true;
-        } else if (telegram.message == new MessageTypes().receiveBall) {
-            player.steeringBehaviours.currentTarget = telegram.additionalInfo;
-
-            var PlayerStateReceiveBall = require('./playerStateReceiveBall');
-            player.stateMachine.changeState(new PlayerStateReceiveBall());
         }
         return false;
-        // @todo other message types
     };
 }
 

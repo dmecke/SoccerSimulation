@@ -1,6 +1,19 @@
 function Param() {
     this.GoalWidth = 100;
 
+    //use to set up the sweet spot calculator
+    this.NumSweetSpotsX = 13;
+    this.NumSweetSpotsY = 6;
+
+    //these values tweak the various rules used to calculate the support spots
+    this.Spot_CanPassScore = 2;
+    this.Spot_CanScoreFromPositionScore = 1;
+    this.Spot_DistFromControllingPlayerScore = 2;
+    this.Spot_ClosenessToSupportingPlayerScore = 0;
+    this.Spot_AheadOfAttackerScore = 0;
+
+    this.SupportSpotUpdateFreq = 1;
+
     this.WindowWidth = 700;
     this.WindowHeight = 400;
 

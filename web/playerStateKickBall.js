@@ -5,11 +5,11 @@ function PlayerStateKickBall() {
     this.name = 'KickBall';
 
     this.enter = function(player) {
-        var PlayerStateChase = require('./playerStateChase');
         player.team.controllingPlayer = player;
         player.team.getOpponent().controllingPlayer = null;
 
 //        if (!player.isReadyForNextKick()) { todo
+//            var PlayerStateChase = require('./playerStateChase');
 //            player.stateMachine.changeState(new PlayerStateChase());
 //        }
     };
@@ -45,7 +45,7 @@ function PlayerStateKickBall() {
 
             player.stateMachine.changeState(new PlayerStateWait());
 
-//            player.findSupport(); todo
+            player.findSupport();
 
             return;
         }
@@ -66,12 +66,12 @@ function PlayerStateKickBall() {
 
             player.stateMachine.changeState(new PlayerStateWait());
 
-//            player.findSupport(); todo
+            player.findSupport();
 
             return;
         }
 
-//        player.findSupport(); todo
+        player.findSupport();
 
         player.stateMachine.changeState(new PlayerStateDribble());
     };

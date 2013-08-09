@@ -10,6 +10,7 @@ var PlayerStateReturnToHomeRegion = require('./playerStateReturnToHomeRegion');
 var MessageDispatcher = require('./messageDispatcher');
 var MessageTypes = require('./messageTypes');
 var Helper = require('./helper');
+var SupportSpotCalculator = require('./supportSpotCalculator');
 
 function Team(id, pitch, color) {
     this.id = id;
@@ -18,23 +19,23 @@ function Team(id, pitch, color) {
     this.stateMachine = new TeamStateMachine(this);
     this.players = [];
 
-    var player1 = new Goalkeeper(1, this);
+    var player1 = new Goalkeeper(1, this, 'goalkeeper');
     player1.stateMachine.changeState(new GoalkeeperStateReturnHome());
     this.players.push(player1);
 
-    var player2 = new Player(2, this);
+    var player2 = new Player(2, this, 'defender');
     player2.stateMachine.changeState(new PlayerStateWait());
     this.players.push(player2);
 
-    var player3 = new Player(3, this);
+    var player3 = new Player(3, this, 'defender');
     player3.stateMachine.changeState(new PlayerStateWait());
     this.players.push(player3);
 
-    var player4 = new Player(4, this);
+    var player4 = new Player(4, this, 'attacker');
     player4.stateMachine.changeState(new PlayerStateWait());
     this.players.push(player4);
 
-    var player5 = new Player(5, this);
+    var player5 = new Player(5, this, 'attacker');
     player5.stateMachine.changeState(new PlayerStateWait());
     this.players.push(player5);
 
@@ -84,7 +85,7 @@ function Team(id, pitch, color) {
 
     this.returnAllFieldPlayersToHome = function() {
         for (var i = 0; i < this.players.length; i++) {
-            if (!this.players[i].isGoalkeeper) {
+            if (this.players[i].role != 'goalkeeper') {
                 this.players[i].stateMachine.changeState(new PlayerStateReturnToHomeRegion());
             }
         }
@@ -93,6 +94,9 @@ function Team(id, pitch, color) {
     this.changePlayerHomeRegions = function(homeRegions) {
         for (var i = 0; i < this.players.length; i++) {
             this.players[i].homeRegion = this.pitch.regions[homeRegions[i]];
+            if (!this.players[i].defaultHomeRegion) {
+                this.players[i].defaultHomeRegion = this.pitch.regions[homeRegions[i]];
+            }
         }
     };
 
@@ -287,7 +291,7 @@ function Team(id, pitch, color) {
 
     this.updateTargetsOfWaitingPlayers = function() {
         jquery.each(this.players, function(index, player) {
-            if (!player.isGoalkeeper) {
+            if (player.role != 'goalkeeper') {
                 if (player.stateMachine.currentState.name == 'Wait' || player.stateMachine.currentState.name == 'ReturnToHomeRegion') {
                     player.steeringBehaviours.currentTarget = player.homeRegion.center;
                 }
@@ -316,6 +320,30 @@ function Team(id, pitch, color) {
             }
         });
         return false;
+    };
+
+    this.determineBestSupportingAttacker = function() {
+        var closestSoFar = 100000000000;
+        var bestPlayer = null;
+        var that = this;
+
+        jquery.each(this.players, function(index, player) {
+            //only attackers utilize the BestSupportingSpot
+            if (player.role == 'attacker' && player != that.controllingPlayer) {
+                //calculate the dist. Use the squared value to avoid sqrt
+                var distance = player.position.distanceSq(new SupportSpotCalculator(new Param().NumSweetSpotsX, new Param().NumSweetSpotsY, that).getBestSupportingSpot());
+
+                //if the distance is the closest so far and the player is not a
+                //goalkeeper and the player is not the one currently controlling
+                //the ball, keep a record of this player
+                if (distance < closestSoFar) {
+                    closestSoFar = distance;
+                    bestPlayer = player;
+                }
+            }
+        });
+
+        return bestPlayer;
     };
 
     this.equals = function(team) {

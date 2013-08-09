@@ -5,11 +5,10 @@ var Param = require('./param');
 var util = require('util');
 var jquery = require('jquery');
 
-function Player(id, team) {
-    BasePlayer.call(this, id, team);
+function Player(id, team, role) {
+    BasePlayer.call(this, id, team, role);
     this.neighbours = [];
     this.stateMachine = new PlayerStateMachine(this);
-    this.isGoalkeeper = false;
 
     this.update = function() {
         this.tagNeighbours();

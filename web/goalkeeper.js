@@ -4,10 +4,9 @@ var Param = require('./param');
 var Vector2d = require('./vector2d');
 var util = require('util');
 
-function Goalkeeper(id, team) {
-    BasePlayer.call(this, id, team);
+function Goalkeeper(id, team, role) {
+    BasePlayer.call(this, id, team, role);
     this.stateMachine = new GoalkeeperStateMachine(this);
-    this.isGoalkeeper = true;
 
     this.update = function() {
         this.stateMachine.update();

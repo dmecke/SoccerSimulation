@@ -2,8 +2,10 @@ var MovingEntity = require('./movingEntity');
 var Vector2d = require('./vector2d');
 var Param = require('./param');
 var util = require('util');
+var MessageDispatcher = require('./messageDispatcher');
+var MessageTypes = require('./messageTypes');
 
-function BasePlayer(id, team) {
+function BasePlayer(id, team, role) {
     MovingEntity.call(this, new Param().PlayerMaxForce, new Param().PlayerMaxSpeedWithoutBall, new Param().PlayerMass);
 
     this.id = id;
@@ -11,6 +13,8 @@ function BasePlayer(id, team) {
     this.team = team;
     this.position = new Vector2d((this.team.pitch.playingArea.right - this.team.pitch.playingArea.left) / 2, this.team.pitch.playingArea.bottom);
     this.homeRegion = null;
+    this.defaultHomeRegion = null;
+    this.role = role;
 
     this.inHomeRegion = function() {
         return this.homeRegion.isInside(this.position);
@@ -22,7 +26,6 @@ function BasePlayer(id, team) {
 
     /**
      * true if the player is located in the designated 'hot region' -- the area close to the opponent's goal
-     * @todo check if position.y is correct - should this be the direct line instead?
      */
     this.inHotRegion = function() {
         return Math.abs(this.position.y - this.team.getGoal().center.y) < this.team.pitch.playingArea.length / 3;
@@ -76,6 +79,33 @@ function BasePlayer(id, team) {
         var toSubject = localPosition.subtract(this.position);
 
         return toSubject.dot(this.heading) > 0;
+    };
+
+    /**
+     * determines the player who is closest to the SupportSpot and messages him
+     * to tell him to change state to SupportAttacker
+     */
+    this.findSupport = function() {
+        //if there is no support we need to find a suitable player.
+        if (this.team.supportingPlayer == null) {
+            var bestSupportPlayer = this.team.determineBestSupportingAttacker();
+            this.team.supportingPlayer = bestSupportPlayer;
+            new MessageDispatcher().dispatchMessage(0, this, this.team.supportingPlayer, new MessageTypes().supportAttacker, null);
+        }
+
+        var bestSupportPlayer = this.team.determineBestSupportingAttacker();
+
+        //if the best player available to support the attacker changes, update
+        //the pointers and send messages to the relevant players to update their
+        //states
+        if (bestSupportPlayer != null && bestSupportPlayer != this.team.supportingPlayer) {
+
+            if (this.team.supportingPlayer != null) {
+                new MessageDispatcher().dispatchMessage(0, this, this.team.supportingPlayer, new MessageTypes().goHome, null);
+            }
+            this.team.supportingPlayer = bestSupportPlayer;
+            new MessageDispatcher().dispatchMessage(0, this, this.team.supportingPlayer, new MessageTypes().supportAttacker, null);
+        }
     };
 }
 util.inherits(BasePlayer, MovingEntity);
