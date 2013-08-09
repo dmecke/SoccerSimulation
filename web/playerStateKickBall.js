@@ -8,10 +8,10 @@ function PlayerStateKickBall() {
         player.team.controllingPlayer = player;
         player.team.getOpponent().controllingPlayer = null;
 
-//        if (!player.isReadyForNextKick()) { todo
-//            var PlayerStateChase = require('./playerStateChase');
-//            player.stateMachine.changeState(new PlayerStateChase());
-//        }
+        if (!player.isReadyForNextKick()) {
+            var PlayerStateChase = require('./playerStateChase');
+            player.stateMachine.changeState(new PlayerStateChase());
+        }
     };
 
     this.exit = function(player) {

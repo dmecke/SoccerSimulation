@@ -49,6 +49,10 @@ function Player(id, team, role) {
     this.isAheadOfAttacker = function() {
         return Math.abs(this.position.x - this.team.getGoal().center.x) < Math.abs(this.team.controllingPlayer.position.x - this.team.getGoal().center.x);
     };
+
+    this.isReadyForNextKick = function() {
+        return true; // @todo
+    };
 }
 util.inherits(Player, BasePlayer);
 

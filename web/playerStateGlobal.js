@@ -32,11 +32,11 @@ function PlayerStateGlobal() {
             }
 
             //set the target to be the best supporting position
-//            player.steeringBehaviours.currentTarget = player.team.getSupportSpot(); // @todo
+            player.steeringBehaviours.currentTarget = player.team.getSupportSpot();
 
             //change the state
-//            var PlayerStateSupportAttacker = require('./playerStateSupportAttacker'); // @todo
-//            player.stateMachine.changeState(new PlayerStateSupportAttacker()); // @todo
+            var PlayerStateSupportAttacker = require('./playerStateSupportAttacker');
+            player.stateMachine.changeState(new PlayerStateSupportAttacker());
 
             return true;
         } else if (telegram.message == new MessageTypes().wait) {

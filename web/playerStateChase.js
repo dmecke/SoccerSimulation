@@ -10,9 +10,6 @@ function PlayerStateChase() {
     };
 
     this.execute = function(player) {
-//        if (player.team.id == 1) {
-//            return;
-//        }
         var PlayerStateReturnToHomeRegion = require('./playerStateReturnToHomeRegion');
         var PlayerStateKickBall = require('./playerStateKickBall');
 

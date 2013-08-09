@@ -50,6 +50,8 @@ function Team(id, pitch, color) {
         this.name = 'Blue';
     }
 
+    this.supportSpotCalculator = new SupportSpotCalculator(new Param().NumSweetSpotsX, new Param().NumSweetSpotsY, this);
+
     this.update = function() {
         for (var i = 0; i < this.players.length; i++) {
             this.players[i].update();
@@ -331,7 +333,7 @@ function Team(id, pitch, color) {
             //only attackers utilize the BestSupportingSpot
             if (player.role == 'attacker' && player != that.controllingPlayer) {
                 //calculate the dist. Use the squared value to avoid sqrt
-                var distance = player.position.distanceSq(new SupportSpotCalculator(new Param().NumSweetSpotsX, new Param().NumSweetSpotsY, that).getBestSupportingSpot());
+                var distance = player.position.distanceSq(that.supportSpotCalculator.getBestSupportingSpot());
 
                 //if the distance is the closest so far and the player is not a
                 //goalkeeper and the player is not the one currently controlling
@@ -344,6 +346,10 @@ function Team(id, pitch, color) {
         });
 
         return bestPlayer;
+    };
+
+    this.getSupportSpot = function() {
+        return this.supportSpotCalculator.getBestSupportingSpot();
     };
 
     this.equals = function(team) {
