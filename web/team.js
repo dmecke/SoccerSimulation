@@ -308,7 +308,7 @@ function Team(id, pitch, color) {
             //let the receiver know a pass is coming
             var dispatcher = new MessageDispatcher();
             var messageTypes = new MessageTypes();
-            dispatcher.dispatchMessage(0, requester, this.controllingPlayer, messageTypes.passToMe, requester);
+            dispatcher.dispatchMessage(requester, this.controllingPlayer, messageTypes.passToMe, requester);
         }
     };
 

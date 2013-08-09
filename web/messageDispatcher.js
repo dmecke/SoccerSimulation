@@ -1,18 +1,14 @@
 var Telegram = require('./telegram');
 
 function MessageDispatcher() {
-    this.dispatchMessage = function(delay, sender, receiver, message, additionalInfo) {
+    this.dispatchMessage = function(sender, receiver, message, additionalInfo) {
         if (receiver == null) {
             return;
         }
 
-        var telegram = new Telegram(0, sender, receiver, message, additionalInfo);
+        var telegram = new Telegram(sender, receiver, message, additionalInfo);
 
-        if (delay == 0) {
-            this.discharge(receiver, telegram);
-        } else {
-            // @todo
-        }
+        this.discharge(receiver, telegram);
     };
 
     this.discharge = function(receiver, telegram) {

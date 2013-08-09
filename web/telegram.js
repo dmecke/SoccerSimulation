@@ -1,5 +1,4 @@
-function Telegram(delay, sender, receiver, message, additionalInfo) {
-    this.delay = delay;
+function Telegram(sender, receiver, message, additionalInfo) {
     this.sender = sender;
     this.receiver = receiver;
     this.message = message;

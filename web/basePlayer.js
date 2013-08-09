@@ -90,7 +90,7 @@ function BasePlayer(id, team, role) {
         if (this.team.supportingPlayer == null) {
             var bestSupportPlayer = this.team.determineBestSupportingAttacker();
             this.team.supportingPlayer = bestSupportPlayer;
-            new MessageDispatcher().dispatchMessage(0, this, this.team.supportingPlayer, new MessageTypes().supportAttacker, null);
+            new MessageDispatcher().dispatchMessage(this, this.team.supportingPlayer, new MessageTypes().supportAttacker, null);
         }
 
         var bestSupportPlayer = this.team.determineBestSupportingAttacker();
@@ -101,10 +101,10 @@ function BasePlayer(id, team, role) {
         if (bestSupportPlayer != null && bestSupportPlayer != this.team.supportingPlayer) {
 
             if (this.team.supportingPlayer != null) {
-                new MessageDispatcher().dispatchMessage(0, this, this.team.supportingPlayer, new MessageTypes().goHome, null);
+                new MessageDispatcher().dispatchMessage(this, this.team.supportingPlayer, new MessageTypes().goHome, null);
             }
             this.team.supportingPlayer = bestSupportPlayer;
-            new MessageDispatcher().dispatchMessage(0, this, this.team.supportingPlayer, new MessageTypes().supportAttacker, null);
+            new MessageDispatcher().dispatchMessage(this, this.team.supportingPlayer, new MessageTypes().supportAttacker, null);
         }
     };
 }

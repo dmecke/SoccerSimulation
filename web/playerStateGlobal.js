@@ -69,7 +69,7 @@ function PlayerStateGlobal() {
 
             var dispatcher = new MessageDispatcher();
             var messageTypes = new MessageTypes();
-            dispatcher.dispatchMessage(0, player, receiver, messageTypes.receiveBall, receiver.position);
+            dispatcher.dispatchMessage(player, receiver, messageTypes.receiveBall, receiver.position);
 
             //change state
             var PlayerStateWait = require('./playerStateWait');

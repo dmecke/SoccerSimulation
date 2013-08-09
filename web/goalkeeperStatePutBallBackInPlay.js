@@ -30,7 +30,7 @@ function GoalkeeperStatePutBallBackInPlay() {
 
             var dispatcher = new MessageDispatcher();
             var messageTypes = new MessageTypes();
-            dispatcher.dispatchMessage(0, goalkeeper, receiver, messageTypes.receiveBall, ballTarget);
+            dispatcher.dispatchMessage(goalkeeper, receiver, messageTypes.receiveBall, ballTarget);
 
             var GoalkeeperStateTendGoal = require('./goalkeeperStateTendGoal');
             goalkeeper.stateMachine.changeState(new GoalkeeperStateTendGoal());
